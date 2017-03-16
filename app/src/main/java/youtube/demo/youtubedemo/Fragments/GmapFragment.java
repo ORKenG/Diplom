@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,10 +37,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import youtube.demo.youtubedemo.Activities.JobActivity;
+import youtube.demo.youtubedemo.Activities.SetMarkerActivity;
 import youtube.demo.youtubedemo.AsyncTasks.CreateNewProduct;
 import youtube.demo.youtubedemo.AsyncTasks.LoadAllProducts;
 import youtube.demo.youtubedemo.R;
-import youtube.demo.youtubedemo.Activities.SetMarkerActivity;
 
 import static youtube.demo.youtubedemo.Activities.MainActivity.flag;
 
@@ -61,12 +61,11 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     private Map<Marker, String> allMarkersMap = new HashMap<>();
     private Map<String, Marker> MarkersMap = new HashMap<>();
     private Map<Marker, String> allUserMap = new HashMap<>();
-    private Map<Marker, String> allAddressMap = new HashMap<>();
+
     private EditText search_EditText;
     ArrayList<ArrayList<String>> arrayLists;
     ImageButton searchBtn;
     FloatingActionButton moveCamera;
-    private String current_address;
 
     @Nullable
     @Override
@@ -237,12 +236,29 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
-    public void openJob(String phone, String name, String address) {
+    public void openJob(String phone, String name, LatLng pos) {
+        geocoder = new Geocoder(getActivity());
         Intent bundle = new Intent(getActivity(), JobActivity.class);
         bundle.putExtra("phone", phone);
         bundle.putExtra("name", name);
-        bundle.putExtra("address", address);
-        startActivity(bundle);
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(pos.latitude,pos.longitude,1);
+            String addressText;
+            if (addresses != null && addresses.size() > 0) {
+                android.location.Address address = addresses.get(0);
+
+                addressText = String.format("%s, %s, %s",
+                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                        address.getLocality(),
+                        address.getCountryName());
+                bundle.putExtra("address", addressText);
+                startActivity(bundle);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -253,25 +269,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         try {
             arrayLists = l.get();
             for (int i = 0; i < arrayLists.size(); i++) {
-                geocoder = new Geocoder(getActivity());
-                List<android.location.Address> addresses = null;
 
-                try {
-                    addresses = geocoder.getFromLocation(Double.parseDouble(arrayLists.get(i).get(1)), Double.parseDouble(arrayLists.get(i).get(2)), 1);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                }
-                String addressText = null;
-                if (addresses != null && addresses.size() > 0) {
-                    android.location.Address address = addresses.get(0);
-
-                    addressText = String.format("%s, %s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getLocality(),
-                            address.getCountryName());
-                }
 
                 float color = 0;
                 switch (arrayLists.get(i).get(4)) {
@@ -294,14 +292,12 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                             .snippet(arrayLists.get(i).get(3)));
                     allMarkersMap.put(marker, arrayLists.get(i).get(5));
                     allUserMap.put(marker, arrayLists.get(i).get(6));
-                    allAddressMap.put(marker, addressText);
                     MarkersMap.put(arrayLists.get(i).get(0), marker);
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
                             current_id = allMarkersMap.get(marker);
                             current_user_id = allUserMap.get(marker);
-                            current_address = allAddressMap.get(marker);
                             return false;
                         }
                     });
@@ -323,10 +319,12 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                openJob(marker.getSnippet(), marker.getTitle(), current_address);
+
+                openJob(marker.getSnippet(), marker.getTitle(), marker.getPosition());
             }
         });
 

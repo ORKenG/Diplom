@@ -22,6 +22,7 @@ import youtube.demo.youtubedemo.AsyncTasks.CreateNewComment;
 import youtube.demo.youtubedemo.AsyncTasks.DeleteMarker;
 import youtube.demo.youtubedemo.Fragments.GmapFragment;
 import youtube.demo.youtubedemo.AsyncTasks.LoadUserProfile;
+import youtube.demo.youtubedemo.MyAdapter;
 import youtube.demo.youtubedemo.R;
 
 import static youtube.demo.youtubedemo.Activities.MainActivity.flag;
@@ -52,7 +53,7 @@ public class JobActivity extends AppCompatActivity {
         System.out.println("Current id = " + GmapFragment.current_id);
         phoneNumber = bundle.getStringExtra("phone");
 
-        ArrayList<String> name = new ArrayList<>();
+        ArrayList<ArrayList<String>> name = new ArrayList<>();
         CommentLoad commentLoad = new CommentLoad();
         commentLoad.execute();
         try {
@@ -61,8 +62,7 @@ public class JobActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         comment = (ListView) findViewById(R.id.view_comment);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, name);
+        MyAdapter adapter = new MyAdapter(this, name);
         comment.setAdapter(adapter);
         commentText = (EditText) findViewById(R.id.commentInput);
         sendComment = (Button) findViewById(R.id.sendComment);
@@ -125,15 +125,14 @@ public class JobActivity extends AppCompatActivity {
         createNewComment.execute(args);
         CommentLoad commentLoad = new CommentLoad();
         commentLoad.execute();
-        ArrayList<String> name = new ArrayList<>();
+        ArrayList<ArrayList<String>> name = new ArrayList<>();
         try {
             name = commentLoad.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, name);
+        MyAdapter adapter = new MyAdapter(this, name);
         comment.setAdapter(adapter);
 
     }
