@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillViewport="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:id="@+id/job_title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        android:id="@+id/employee_phone" />
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        app:backgroundTint="#22dd22"
+        android:layout_marginLeft="20dp"
+        android:tint="#ffffff"
+        android:src="@android:drawable/ic_menu_call"
+        android:text="@string/call"
+        android:id="@+id/call" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
+        app:backgroundTint="#22dd22"
+        android:tint="#ffffff"
+        android:src="@android:drawable/ic_dialog_email"
+        android:text="@string/sms"
+        android:id="@+id/sms" />
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/delete"
+        android:id="@+id/delete" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/show_profile"
+        android:id="@+id/show_profile" />
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:inputType="textMultiLine"
+        android:hint="@string/input_comment"
+        android:lines="6"/>
+    <Button
+        android:id="@+id/sendComment"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/send"/>
+    <ListView
+
+        android:id="@+id/view_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>
+</ScrollView>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_set_marker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="youtube.demo.youtubedemo.Activities.SetMarkerActivity"
+    tools:showIn="@layout/activity_set_marker">
+
+    <ScrollView
+        android:id="@+id/setMarkerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="@string/enter_your_text"
+        android:id="@+id/set_text"/>
+
+    <Spinner
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/set_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp"
+        android:id="@+id/spinner" />
+
+
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/enter_street"
+        android:hint="Введите адрес"
+        android:layout_below="@+id/spinner"
+        android:layout_alignParentStart="true" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/add_by_address"
+        android:layout_below="@+id/enter_street"
+        android:background="@drawable/buttonstyle"
+        android:shadowColor="#0D0C29"
+        android:shadowDx="1"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:id="@+id/btn_addByAddress"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonstyle"
+        android:shadowColor="#0D0C29"
+        android:shadowDx="1"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:text="@string/add_by_click"
+        android:layout_below="@+id/btn_addByAddress"
+        android:layout_marginTop="16dp"
+        android:id="@+id/btn_addByClick"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonstyle"
+        android:shadowColor="#0D0C29"
+        android:shadowDx="1"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:layout_marginTop="16dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_below="@+id/btn_addByClick"
+        android:text="@string/add_on_my_position"
+        android:id="@+id/btn_addOnMyPosition"/>
+
+
+        </RelativeLayout>
+    </ScrollView>
+    <ProgressBar
+        android:id="@+id/setMarker_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="127dp" />
+</RelativeLayout>
