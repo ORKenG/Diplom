@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -61,11 +62,13 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     private Map<Marker, String> allMarkersMap = new HashMap<>();
     private Map<String, Marker> MarkersMap = new HashMap<>();
     private Map<Marker, String> allUserMap = new HashMap<>();
-
+    Button hideAndShow;
+    Button confirm;
     private EditText search_EditText;
     ArrayList<ArrayList<String>> arrayLists;
     ImageButton searchBtn;
     FloatingActionButton moveCamera;
+    private boolean flagForVisible=false;
 
     @Nullable
     @Override
@@ -98,30 +101,31 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
                 break;
             case 2:
-                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                final Marker marker = mMap.addMarker(new MarkerOptions().
+                        position(new LatLng(myLat, myLng))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        marker.setDraggable(true);
 
+                hideAndShow.setVisibility(View.VISIBLE);
+                confirm.setVisibility(View.VISIBLE);
+                confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onMapClick(LatLng latLng) {
-
+                    public void onClick(View v) {
                         String name = data.getStringExtra("name");
                         String phone = data.getStringExtra("phone");
                         args[0] = name;
-                        args[1] = Double.toString(latLng.latitude);
-                        args[2] = Double.toString(latLng.longitude);
+                        args[1] = Double.toString(marker.getPosition().latitude);
+                        args[2] = Double.toString(marker.getPosition().longitude);
                         args[3] = type;
                         args[4] = phone;
                         CreateNewProduct createNewProduct = new CreateNewProduct();
                         createNewProduct.execute(args);
                         dbRead();
-                        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                            @Override
-                            public void onMapClick(LatLng latLng) {
-
-                            }
-                        });
+                        hideAndShow.setVisibility(View.INVISIBLE);
+                        confirm.setVisibility(View.INVISIBLE);
                     }
                 });
+
                 break;
             case 3:
                 args[0] = name;
@@ -143,6 +147,13 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         JobActivity.textForAddress = "";
         MapFragment fragment = new MapFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.dummy, fragment).commit();
+        hideAndShow = (Button) getActivity().findViewById(R.id.hideAndShow);
+        hideAndShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAndshow();
+            }
+        });
         searchBtn = (ImageButton) getActivity().findViewById(R.id.button_search);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +161,8 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                 search();
             }
         });
+        confirm = (Button) getActivity().findViewById(R.id.confirm);
+
         moveCamera = (FloatingActionButton) getActivity().findViewById(R.id.button_move_camera);
         moveCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +211,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         }
         myLat = location.getLatitude();
         myLng = location.getLongitude();
-        myPosition = mMap.addMarker(new MarkerOptions().title("Here I am!").position(new LatLng(myLat, myLng))
+        myPosition = mMap.addMarker(new MarkerOptions().position(new LatLng(myLat, myLng))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name)));
     }
 
@@ -211,7 +224,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             myPosition.remove();
         }
         if (myLat != 0 && myLng != 0) {
-            myPosition = mMap.addMarker(new MarkerOptions().title("Here I am!").position(new LatLng(myLat, myLng))
+            myPosition = mMap.addMarker(new MarkerOptions().position(new LatLng(myLat, myLng))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name)));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLat, myLng), 13));
         }
@@ -263,7 +276,14 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
-
+    public void hideAndshow(){
+        Marker marker;
+        for (int i = 0; i <allMarkersMap.size() ; i++) {
+            marker = MarkersMap.get(arrayLists.get(i).get(0));
+            marker.setVisible(flagForVisible);
+        }
+        flagForVisible=!flagForVisible;
+    }
     public void dbRead() {
         System.out.println(marker_type[0]);
         LoadAllProducts l = new LoadAllProducts();
@@ -292,6 +312,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                             .title(arrayLists.get(i).get(0))
                             .icon(BitmapDescriptorFactory.defaultMarker(color))
                             .snippet(arrayLists.get(i).get(3)));
+
                     allMarkersMap.put(marker, arrayLists.get(i).get(5));
                     allUserMap.put(marker, arrayLists.get(i).get(6));
                     MarkersMap.put(arrayLists.get(i).get(0), marker);

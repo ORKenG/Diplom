@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Toast;
 
 import youtube.demo.youtubedemo.Fragments.GmapFragment;
 import youtube.demo.youtubedemo.R;
@@ -106,7 +105,7 @@ public static boolean flag=true;
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
             flag=!flag;
-            Toast.makeText(this,String.valueOf(flag),Toast.LENGTH_SHORT).show();
+
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
 
 

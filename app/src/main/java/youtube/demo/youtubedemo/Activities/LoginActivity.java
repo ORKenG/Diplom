@@ -52,12 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        System.out.println("username = " + sharedPreferences.getString("login","default"));
-        if (!sharedPreferences.getString("login","default").equals("default")){
-            mAuthTask = new UserLoginTask(sharedPreferences.getString("login","default"), sharedPreferences.getString("password","default"));
-            mAuthTask.execute();
-        }
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -87,6 +82,13 @@ public class LoginActivity extends AppCompatActivity {
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        System.out.println("username = " + sharedPreferences.getString("login","default"));
+        if (!sharedPreferences.getString("login","default").equals("default")){
+            showProgress(true);
+            mAuthTask = new UserLoginTask(sharedPreferences.getString("login","default"), sharedPreferences.getString("password","default"));
+            mAuthTask.execute();
+        }
     }
 
     @Override

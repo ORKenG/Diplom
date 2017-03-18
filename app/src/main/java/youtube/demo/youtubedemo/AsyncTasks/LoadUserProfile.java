@@ -64,10 +64,12 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
                 String from = c.getString("fromm");
                 String fromid = c.getString("fromid");
                 String date = c.getString("date");
+                String mark = c.getString("mark");
                 line.add(0,txt);
                 line.add(1,from);
                 line.add(2,fromid);
                 line.add(3,date);
+                line.add(4,mark);
                 array.add(i+2,line);
             }
         } catch (JSONException | IOException e) {

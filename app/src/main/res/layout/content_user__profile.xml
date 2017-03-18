@@ -29,6 +29,11 @@
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:id="@+id/avg_mark"/>
+    <Button
+        android:id="@+id/addToBlacklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Добавить в черный список"/>
     <EditText
         android:id="@+id/input_review"
         android:layout_width="match_parent"

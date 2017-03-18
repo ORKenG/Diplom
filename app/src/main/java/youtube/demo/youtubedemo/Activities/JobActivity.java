@@ -166,6 +166,7 @@ public class JobActivity extends AppCompatActivity {
             line.add(0, counts.get(i).get(1));
             line.add(1, counts.get(i).get(0));
             line.add(2, counts.get(i).get(3));
+            line.add(3, counts.get(i).get(4));
             counts2.add(i-2,line);
             id.add(i-2,counts.get(i).get(2));
         }
