@@ -53,7 +53,6 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
                 ArrayList<String> line = new ArrayList<>();
                 JSONObject c = markers.getJSONObject(i);
                 String avg = c.getString("avg_mark");
-
                 line.add(0,avg);
                 array.add(1,line);
             }
@@ -64,9 +63,11 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
                 String txt = c.getString("txt");
                 String from = c.getString("fromm");
                 String fromid = c.getString("fromid");
+                String date = c.getString("date");
                 line.add(0,txt);
                 line.add(1,from);
                 line.add(2,fromid);
+                line.add(3,date);
                 array.add(i+2,line);
             }
         } catch (JSONException | IOException e) {

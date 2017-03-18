@@ -138,7 +138,9 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        JobActivity.textForPhone = "";
+        JobActivity.textForTitle = "";
+        JobActivity.textForAddress = "";
         MapFragment fragment = new MapFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.dummy, fragment).commit();
         searchBtn = (ImageButton) getActivity().findViewById(R.id.button_search);

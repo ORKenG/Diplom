@@ -3,7 +3,6 @@ package youtube.demo.youtubedemo.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import youtube.demo.youtubedemo.AsyncTasks.CreateNewReview;
 import youtube.demo.youtubedemo.AsyncTasks.LoadAllProducts;
 import youtube.demo.youtubedemo.AsyncTasks.LoadUserProfile;
+import youtube.demo.youtubedemo.MyAdapter;
 import youtube.demo.youtubedemo.R;
 
 public class User_Profile extends AppCompatActivity {
@@ -72,8 +72,8 @@ public class User_Profile extends AppCompatActivity {
         avg_mark.setText(txt2);
         name_user.setText(intent.getStringExtra("name"));
         surname_user.setText(intent.getStringExtra("surname"));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, intent.getStringArrayListExtra("review"));
+
+        MyAdapter adapter = new MyAdapter(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
         view_review.setAdapter(adapter);
 
 

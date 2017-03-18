@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,8 +19,8 @@ import java.util.concurrent.ExecutionException;
 import youtube.demo.youtubedemo.AsyncTasks.CommentLoad;
 import youtube.demo.youtubedemo.AsyncTasks.CreateNewComment;
 import youtube.demo.youtubedemo.AsyncTasks.DeleteMarker;
-import youtube.demo.youtubedemo.Fragments.GmapFragment;
 import youtube.demo.youtubedemo.AsyncTasks.LoadUserProfile;
+import youtube.demo.youtubedemo.Fragments.GmapFragment;
 import youtube.demo.youtubedemo.MyAdapter;
 import youtube.demo.youtubedemo.R;
 
@@ -40,10 +39,13 @@ public class JobActivity extends AppCompatActivity {
     Button delete;
     Button show_profile;
     ListView comment;
-    String phoneNumber = "";
+
     EditText commentText;
     Button sendComment;
-
+    TextView address;
+    public static String textForTitle;
+    public static String textForPhone;
+    public static String textForAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class JobActivity extends AppCompatActivity {
         Intent bundle = getIntent();
         setContentView(R.layout.activity_job);
         System.out.println("Current id = " + GmapFragment.current_id);
-        phoneNumber = bundle.getStringExtra("phone");
+
 
         ArrayList<ArrayList<String>> name = new ArrayList<>();
         CommentLoad commentLoad = new CommentLoad();
@@ -72,10 +74,18 @@ public class JobActivity extends AppCompatActivity {
                 sendComment();
             }
         });
-        phone = ((TextView) findViewById(R.id.employee_phone));
-        phone.setText("Номер телефона: " + phoneNumber + "\nАдрес: " + bundle.getStringExtra("address"));
+        phone = (TextView) findViewById(R.id.employee_phone);
+        address = (TextView) findViewById(R.id.address);
         job_name = ((TextView) findViewById(R.id.job_title));
-        job_name.setText(bundle.getStringExtra("name"));
+        if (textForTitle.equals("") && textForPhone.equals("")) {
+            textForPhone = bundle.getStringExtra("phone");
+            textForAddress = bundle.getStringExtra("address");
+            textForTitle = bundle.getStringExtra("name");
+        }
+        phone.setText(textForPhone);
+        address.setText(textForAddress);
+        job_name.setText(textForTitle);
+
         call = ((FloatingActionButton) findViewById(R.id.call));
         sms = ((FloatingActionButton) findViewById(R.id.sms));
         delete = ((Button) findViewById(R.id.delete));
@@ -148,11 +158,15 @@ public class JobActivity extends AppCompatActivity {
         intent.putExtra("name",counts.get(0).get(1));
         intent.putExtra("surname",counts.get(0).get(2));
         intent.putExtra("avg",counts.get(1).get(0));
-       ArrayList<String> counts2 = new ArrayList<>();
+       ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
        ArrayList<String> id = new ArrayList<>();
         counts2.ensureCapacity(4);
         for (int i = 2; i<counts.size(); i++){
-            counts2.add(i-2,counts.get(i).get(1) + ": " + counts.get(i).get(0));
+            ArrayList<String> line = new ArrayList<>();
+            line.add(0, counts.get(i).get(1));
+            line.add(1, counts.get(i).get(0));
+            line.add(2, counts.get(i).get(3));
+            counts2.add(i-2,line);
             id.add(i-2,counts.get(i).get(2));
         }
         intent.putExtra("review",counts2);
