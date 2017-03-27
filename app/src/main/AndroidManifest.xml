@@ -58,13 +58,22 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCEwbPsJMV29LRUuwPuQJLba7_vweY5VoM" />
-
         <activity
             android:name=".Activities.SetMarkerActivity"
             android:label="Добавить маркер"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.ListOfJobsActivity"
+            android:label="Добавить маркер"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+         >
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".Activities.MainActivity" />
@@ -88,7 +97,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Activities.MainActivity" />
+            android:value=".Activities.ListOfJobsActivity" />
         </activity>
         <activity
             android:name=".Activities.User_Profile"

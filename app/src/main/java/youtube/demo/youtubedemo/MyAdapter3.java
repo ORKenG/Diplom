@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MyAdapter3 extends ArrayAdapter<ArrayList<String>> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.adapter3, parent, false);
         TextView name = (TextView) rowView.findViewById(R.id.adapterName);
-        final FloatingActionButton delete = (FloatingActionButton) rowView.findViewById(R.id.removeFromBlacklist);
+        final Button delete = (Button) rowView.findViewById(R.id.removeFromBlacklist);
         name.setText(values.get(position).get(0) + " " + values.get(position).get(1));
         id = values.get(position).get(2);
         delete.setOnClickListener(new View.OnClickListener() {

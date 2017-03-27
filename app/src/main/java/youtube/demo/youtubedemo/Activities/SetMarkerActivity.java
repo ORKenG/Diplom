@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import youtube.demo.youtubedemo.Fragments.GmapFragment;
-import youtube.demo.youtubedemo.AsyncTasks.Geocode_Thread;
+import youtube.demo.youtubedemo.AsyncTasks.AddressToLatLng;
 import youtube.demo.youtubedemo.AsyncTasks.PlaceAutocomplete;
 import youtube.demo.youtubedemo.R;
 
@@ -39,6 +39,7 @@ public class SetMarkerActivity extends AppCompatActivity {
     View setMarker_progress;
     String[] values = new String[2];
     ArrayList<String> lst;
+    EditText enter_price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class SetMarkerActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data_for_spinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+        enter_price = (EditText) findViewById(R.id.enter_price);
         spinner = (Spinner) findViewById(R.id.spinner);
         setMarkerView =  findViewById(R.id.setMarkerView);
         setMarker_progress = findViewById(R.id.setMarker_progress);
@@ -174,13 +175,14 @@ public class SetMarkerActivity extends AppCompatActivity {
         intent.putExtra("name", editText.getText().toString());
         intent.putExtra("type", String.valueOf(x));
         intent.putExtra("phone", GmapFragment.userPhone);
+        intent.putExtra("price", enter_price.getText().toString());
         if (type == 1){
 
             String ms[] = new String[1];
             ms[0] = address_autocompleteTextView.getText().toString();
 
-
-            Geocode_Thread thread = new Geocode_Thread();
+            intent.putExtra("address",address_autocompleteTextView.getText().toString());
+            AddressToLatLng thread = new AddressToLatLng();
             thread.execute(ms);
             try {
                 ArrayList<Double> abc = thread.get();
@@ -191,6 +193,7 @@ public class SetMarkerActivity extends AppCompatActivity {
             }
 
         }
+
         intent.putExtra("typeOfMessage",type);
         setResult(RESULT_OK, intent);
         finish();

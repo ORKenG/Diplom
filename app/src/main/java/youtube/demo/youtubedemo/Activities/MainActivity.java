@@ -15,6 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import youtube.demo.youtubedemo.AsyncTasks.LoadUserProfile;
 import youtube.demo.youtubedemo.Fragments.GmapFragment;
 import youtube.demo.youtubedemo.R;
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 public static boolean flag=true;
+        public static boolean flagForMyProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +96,36 @@ public static boolean flag=true;
         int id = item.getItemId();
 
         if (id == R.id.nav_camara) {
+            flagForMyProfile = true;
             Intent intent = new Intent(getBaseContext(), MyUser_Profile.class);
+            LoadUserProfile l = new LoadUserProfile();
+            l.execute();
+            ArrayList<ArrayList<String>> counts = new ArrayList<>();
+            counts.ensureCapacity(4);
+            try {
+                counts = l.get();
+                ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
+                ArrayList<String> idd = new ArrayList<>();
+                counts2.ensureCapacity(4);
+                for (int i = 2; i<counts.size(); i++){
+                    ArrayList<String> line = new ArrayList<>();
+                    line.add(0, counts.get(i).get(1));
+                    line.add(1, counts.get(i).get(0));
+                    line.add(2, counts.get(i).get(3));
+                    line.add(3, counts.get(i).get(4));
+                    counts2.add(i-2,line);
+                    idd.add(i-2,counts.get(i).get(2));
+                }
+                intent.putExtra("review",counts2);
+                intent.putExtra("id",idd);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            intent.putExtra("count",counts.get(0).get(0));
+            intent.putExtra("name",counts.get(0).get(1));
+            intent.putExtra("surname",counts.get(0).get(2));
+            intent.putExtra("avg",counts.get(1).get(0));
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();

@@ -17,14 +17,7 @@ import youtube.demo.youtubedemo.JsonReader;
 import static youtube.demo.youtubedemo.JsonReader.encodeParams;
 
 public class LoadAllProducts extends AsyncTask<Object, Object, ArrayList<ArrayList<String>>> {
-    private static final String TAG_PRODUCTS = "marker";
-    private static final String TAG_ID = "id";
-    private static final String TAG_X = "position_x";
-    private static final String TAG_Y = "position_y";
-    private static final String TAG_PHONE = "phone";
-    private static final String TAG_NAME = "name";
-    private static final String TAG_TYPE = "type";
-    private static final String TAG_USER_ID = "idu";
+
     public static String myId="";
     /**
      * Before starting background thread Show Progress Dialog
@@ -53,28 +46,24 @@ public class LoadAllProducts extends AsyncTask<Object, Object, ArrayList<ArrayLi
 
         try {
             json = JsonReader.read(final_URL);
-            JSONArray markers = json.getJSONArray(TAG_PRODUCTS);
+            JSONArray markers = json.getJSONArray("marker");
                 // looping through All Products
                 for (int i = 0; i < markers.length(); i++) {
                     JSONObject c = markers.getJSONObject(i);
                     ArrayList<String> line = new ArrayList<>();
                     // Storing each json item in variable
-                    String name = c.getString(TAG_NAME);
-                    String position_x = c.getString(TAG_X);
-                    String position_y = c.getString(TAG_Y);
-                    String phone = c.getString(TAG_PHONE);
-                    String type = c.getString(TAG_TYPE);
-                    String id = c.getString(TAG_ID);
-                    String idu = c.getString(TAG_USER_ID);
-                    line.add(0,name);
+
+                    String position_x = c.getString("position_x");
+                    String position_y = c.getString("position_y");
+                    String count = c.getString("idcount");
+                    String address = c.getString("address");
+
+                    line.add(0,count);
                     line.add(1,position_x);
                     line.add(2,position_y);
-                    line.add(3,phone);
-                    line.add(4,type);
-                    line.add(5,id);
-                    line.add(6,idu);
+                    line.add(3,address);
                     array.add(line);
-                    System.out.println("TESTTEST=" + name);
+
                 }
 
         } catch (IOException | JSONException e) {

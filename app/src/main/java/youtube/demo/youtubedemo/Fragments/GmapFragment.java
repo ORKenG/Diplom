@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -29,18 +28,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import youtube.demo.youtubedemo.Activities.JobActivity;
+import youtube.demo.youtubedemo.Activities.ListOfJobsActivity;
 import youtube.demo.youtubedemo.Activities.SetMarkerActivity;
 import youtube.demo.youtubedemo.AsyncTasks.CreateNewProduct;
+import youtube.demo.youtubedemo.AsyncTasks.LatLngToLatLng;
 import youtube.demo.youtubedemo.AsyncTasks.LoadAllProducts;
+import youtube.demo.youtubedemo.MyListener;
 import youtube.demo.youtubedemo.R;
 
 import static youtube.demo.youtubedemo.Activities.MainActivity.flag;
@@ -52,23 +51,28 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     FloatingActionButton button;
     Geocoder geocoder;
     Marker myPosition;
-    String args[] = new String[5];
+    String args[] = new String[9];
     private LocationManager locationManager;
     public static double myLng = 0;
     public static double myLat = 0;
     public static String current_id;
     public static String current_user_id;
+    public static String current_Lat;
+    public static String current_Lng;
     public static String userPhone;
     private Map<Marker, String> allMarkersMap = new HashMap<>();
     private Map<String, Marker> MarkersMap = new HashMap<>();
     private Map<Marker, String> allUserMap = new HashMap<>();
-    Button hideAndShow;
-    Button confirm;
+    private Map<Marker, String> markerLatMap = new HashMap<>();
+    private Map<Marker, String> markerLngMap = new HashMap<>();
+    public Button hideAndShow;
+    public Button confirm;
     private EditText search_EditText;
     ArrayList<ArrayList<String>> arrayLists;
     ImageButton searchBtn;
     FloatingActionButton moveCamera;
     private boolean flagForVisible=false;
+    public static boolean flagForClick=false;
 
     @Nullable
     @Override
@@ -86,6 +90,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         System.out.println(type);
         String name = data.getStringExtra("name");
         String phone = data.getStringExtra("phone");
+        String price = data.getStringExtra("price");
         int add_type = data.getIntExtra("typeOfMessage", 3);
         switch (add_type) {
             case 1:
@@ -94,6 +99,10 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                 args[2] = data.getStringExtra("lng");
                 args[3] = type;
                 args[4] = phone;
+                args[5] = data.getStringExtra("lat");
+                args[6] = data.getStringExtra("lng");
+                args[7] = data.getStringExtra("address");
+                args[8] = price;
                 CreateNewProduct createNewProduct = new CreateNewProduct();
                 createNewProduct.execute(args);
                 dbRead();
@@ -101,41 +110,65 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
                 break;
             case 2:
-                final Marker marker = mMap.addMarker(new MarkerOptions().
+                Marker marker = mMap.addMarker(new MarkerOptions().
                         position(new LatLng(myLat, myLng))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                         marker.setDraggable(true);
 
                 hideAndShow.setVisibility(View.VISIBLE);
                 confirm.setVisibility(View.VISIBLE);
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String name = data.getStringExtra("name");
-                        String phone = data.getStringExtra("phone");
-                        args[0] = name;
-                        args[1] = Double.toString(marker.getPosition().latitude);
-                        args[2] = Double.toString(marker.getPosition().longitude);
-                        args[3] = type;
-                        args[4] = phone;
-                        CreateNewProduct createNewProduct = new CreateNewProduct();
-                        createNewProduct.execute(args);
-                        dbRead();
-                        hideAndShow.setVisibility(View.INVISIBLE);
-                        confirm.setVisibility(View.INVISIBLE);
-                    }
-                });
+
+                 name = data.getStringExtra("name");
+                 phone = data.getStringExtra("phone");
+                MyListener myListener = new MyListener(marker, type, name, phone, this, price);
+              confirm.setOnClickListener(myListener);
+                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDragStart(Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDrag(Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDragEnd(Marker marker) {
+
+                        }
+                    });
 
                 break;
             case 3:
-                args[0] = name;
-                args[1] = Double.toString(myLat);
-                args[2] = Double.toString(myLng);
-                args[3] = type;
-                args[4] = phone;
-                createNewProduct = new CreateNewProduct();
-                createNewProduct.execute(args);
-                dbRead();
+                String ms[] = new String[2];
+                ms[0] = Double.toString(myLat);
+                ms[1] = Double.toString(myLng);
+
+
+                LatLngToLatLng thread = new LatLngToLatLng();
+                thread.execute(ms);
+                try {
+                    ArrayList<String> abc = thread.get();
+                     name = data.getStringExtra("name");
+                    phone = data.getStringExtra("phone");
+                    args[0] = name;
+                    args[1] = abc.get(1);
+                    args[2] = abc.get(0);
+                    args[3] = type;
+                    args[4] = phone;
+                    args[5] =  ms[0];
+                    args[6] =  ms[1];
+                    args[7] =  abc.get(2);
+                    args[8] =  price;
+                     createNewProduct = new CreateNewProduct();
+                    createNewProduct.execute(args);
+                    dbRead();
+                    hideAndShow.setVisibility(View.INVISIBLE);
+                    confirm.setVisibility(View.INVISIBLE);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -186,7 +219,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    public void add(View v) {
+    public void add() {
         Intent intent = new Intent(getActivity(), SetMarkerActivity.class);
         startActivityForResult(intent, 1);
     }
@@ -251,30 +284,9 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
-    public void openJob(String phone, String name, LatLng pos) {
-        geocoder = new Geocoder(getActivity());
-        Intent bundle = new Intent(getActivity(), JobActivity.class);
-        bundle.putExtra("phone", phone);
-        bundle.putExtra("name", name);
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(pos.latitude,pos.longitude,1);
-            String addressText;
-            if (addresses != null && addresses.size() > 0) {
-                android.location.Address address = addresses.get(0);
-
-                addressText = String.format("%s, %s, %s",
-                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                        address.getLocality(),
-                        address.getCountryName());
-                bundle.putExtra("address", addressText);
-                startActivity(bundle);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+    public void openJob() {
+        Intent bundle = new Intent(getActivity(), ListOfJobsActivity.class);
+        startActivity(bundle);
     }
     public void hideAndshow(){
         Marker marker;
@@ -291,40 +303,25 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         try {
             arrayLists = l.get();
             for (int i = 0; i < arrayLists.size(); i++) {
-
-
-                float color = 0;
-                switch (arrayLists.get(i).get(4)) {
-                    case "1":
-                        color = BitmapDescriptorFactory.HUE_BLUE;
-                        break;
-                    case "2":
-                        color = BitmapDescriptorFactory.HUE_RED;
-                        break;
-                    case "3":
-                        color = BitmapDescriptorFactory.HUE_GREEN;
-                        break;
-                }
-
-                if (Arrays.asList(marker_type).contains(Integer.parseInt(arrayLists.get(i).get(4)))) {
                     Marker marker = mMap.addMarker(new MarkerOptions().
                             position(new LatLng(Double.parseDouble(arrayLists.get(i).get(1)), Double.parseDouble(arrayLists.get(i).get(2))))
-                            .title(arrayLists.get(i).get(0))
-                            .icon(BitmapDescriptorFactory.defaultMarker(color))
+                            .title("Доступно работ: " + arrayLists.get(i).get(0))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                             .snippet(arrayLists.get(i).get(3)));
-
-                    allMarkersMap.put(marker, arrayLists.get(i).get(5));
+                        markerLatMap.put(marker,arrayLists.get(i).get(1));
+                        markerLngMap.put(marker,arrayLists.get(i).get(2));
+                   /* allMarkersMap.put(marker, arrayLists.get(i).get(5));
                     allUserMap.put(marker, arrayLists.get(i).get(6));
-                    MarkersMap.put(arrayLists.get(i).get(0), marker);
+                    MarkersMap.put(arrayLists.get(i).get(0), marker);*/
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
-                            current_id = allMarkersMap.get(marker);
-                            current_user_id = allUserMap.get(marker);
+                            current_Lat=markerLatMap.get(marker);
+                            current_Lng=markerLngMap.get(marker);
                             return false;
                         }
                     });
-                }
+
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -338,7 +335,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add(view);
+                add();
             }
         });
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -347,7 +344,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onInfoWindowClick(Marker marker) {
 
-                openJob(marker.getSnippet(), marker.getTitle(), marker.getPosition());
+                openJob();
             }
         });
 

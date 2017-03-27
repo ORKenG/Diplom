@@ -1,5 +1,9 @@
 package youtube.demo.youtubedemo.AsyncTasks;
 
+/**
+ * Created by Cypher on 25.03.2017.
+ */
+
 import android.os.AsyncTask;
 import android.support.test.espresso.core.deps.guava.collect.Maps;
 
@@ -15,18 +19,18 @@ import youtube.demo.youtubedemo.JsonReader;
 import static youtube.demo.youtubedemo.JsonReader.encodeParams;
 
 
-public class Geocode_Thread extends AsyncTask<String, Void, ArrayList<Double>> {
+public class LatLngToLatLng extends AsyncTask<String, Void, ArrayList<String>> {
 
 
 
-    private ArrayList<Double> mas = new ArrayList<>();
+    private ArrayList<String> mas = new ArrayList<>();
     @Override
-    protected ArrayList<Double> doInBackground(String... args) {
+    protected ArrayList<String> doInBackground(String... args) {
         try {
             final String baseUrl = "https://maps.googleapis.com/maps/api/geocode/json";// путь к Geocoding API по HTTP
             final Map<String, String> params = Maps.newHashMap();
             params.put("sensor", "true");// исходит ли запрос на геокодирование от устройства с датчиком местоположения
-            params.put("address", "Украина, Одесса," + args[0]);// адрес, который нужно геокодировать
+            params.put("latlng", args[0] + "," + args[1]);// адрес, который нужно геокодировать
             final String url = baseUrl + '?' + encodeParams(params) + "&key=AIzaSyCRefZ6rlVEma93HbiZnNUUvDbUAq3QUug";// генерируем путь с параметрами
             final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
 
@@ -39,23 +43,21 @@ public class Geocode_Thread extends AsyncTask<String, Void, ArrayList<Double>> {
                 System.out.println("LOCATION1= " + location);
                 location = location.getJSONObject("location");
                 System.out.println("LOCATION1= " + location);
-                mas.ensureCapacity(2);
-                mas.add(0,location.getDouble("lng"));// долгота
-                mas.add(1,location.getDouble("lat"));// широта
+                mas.ensureCapacity(4);
+                mas.add(0,location.getString("lng"));// долгота
+                mas.add(1,location.getString("lat"));// широта
+                location = response.getJSONArray("results").getJSONObject(0);
+                System.out.println("LOCATION1= " + location);
+                System.out.println("LOCATION1= " + location.getString("formatted_address"));
+                mas.add(2,location.getString("formatted_address"));
                 System.out.println("Done");
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-            // как правило наиболее подходящий ответ первый и данные о координатах можно получить по пути
-            // //results[0]/geometry/location/lng и //results[0]/geometry/location/lat
         } catch (Exception e) {
             e.printStackTrace();
         }
         return mas;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<Double> doubles) {
-
-    }
 }

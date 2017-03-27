@@ -25,6 +25,7 @@ import youtube.demo.youtubedemo.MyAdapter;
 import youtube.demo.youtubedemo.R;
 
 import static youtube.demo.youtubedemo.Activities.MainActivity.flag;
+import static youtube.demo.youtubedemo.Activities.MainActivity.flagForMyProfile;
 
 /**
  * Created by Cypher on 04.12.2016.
@@ -148,6 +149,7 @@ public class JobActivity extends AppCompatActivity {
     }
 
     public void showProfile() throws ExecutionException, InterruptedException {
+        flagForMyProfile = false;
         LoadUserProfile l = new LoadUserProfile();
         l.execute();
         ArrayList<ArrayList<String>> counts = new ArrayList<>();

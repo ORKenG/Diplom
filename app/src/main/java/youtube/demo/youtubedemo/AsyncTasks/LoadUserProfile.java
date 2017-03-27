@@ -13,6 +13,8 @@ import java.util.Map;
 
 import youtube.demo.youtubedemo.JsonReader;
 
+import static youtube.demo.youtubedemo.Activities.MainActivity.flagForMyProfile;
+import static youtube.demo.youtubedemo.AsyncTasks.LoadAllProducts.myId;
 import static youtube.demo.youtubedemo.Fragments.GmapFragment.current_user_id;
 import static youtube.demo.youtubedemo.JsonReader.encodeParams;
 
@@ -29,7 +31,12 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
         array.ensureCapacity(2);
         // getting JSON string from URL
         System.out.println("Done correctly");
-        params.put("idu", current_user_id);
+        if (!flagForMyProfile) {
+            params.put("idu", current_user_id);
+        }
+        else{
+            params.put("idu", myId);
+        }
         String url_all_products = "http://7kmcosmetics.com/get_user_info.php";
         String final_URL = url_all_products + "?" + encodeParams(params);
         JSONObject json;

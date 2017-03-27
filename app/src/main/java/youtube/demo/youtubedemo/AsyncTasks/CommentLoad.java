@@ -42,9 +42,11 @@ public class CommentLoad extends AsyncTask<Integer, Void, ArrayList<ArrayList<St
                String text = c.getString("text");
 
                 String date = c.getString("date");
+                String idu = c.getString("idu");
                line.add(0,name);
                line.add(1,text);
                line.add(2,date);
+               line.add(3,idu);
                 result.add(i,line);
             }
 
