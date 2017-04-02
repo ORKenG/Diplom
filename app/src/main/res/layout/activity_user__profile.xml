@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="youtube.demo.youtubedemo.Activities.User_Profile">
+    tools:context="youtube.demo.serverdiplom.Activities.User_Profile">
     <include layout="@layout/content_user__profile" />
 
 </android.support.design.widget.CoordinatorLayout>
