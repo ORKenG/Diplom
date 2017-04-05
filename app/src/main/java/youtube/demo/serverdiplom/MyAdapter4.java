@@ -28,7 +28,6 @@ import static youtube.demo.serverdiplom.Fragments.GmapFragment.real_position_y;
 public class MyAdapter4 extends ArrayAdapter<ArrayList<String>> {
     private final Context context;
     private final ArrayList<ArrayList<String>> values;
-    private String id;
 
 
     public MyAdapter4(Context context, ArrayList<ArrayList<String>> objects) {
@@ -59,7 +58,6 @@ public class MyAdapter4 extends ArrayAdapter<ArrayList<String>> {
         });
         name.setText(values.get(position).get(0));
         price.setText(values.get(position).get(7));
-        id = values.get(position).get(5);
         final String phone = values.get(position).get(3);
         final String address = values.get(position).get(8);
         final String nameu = values.get(position).get(0);

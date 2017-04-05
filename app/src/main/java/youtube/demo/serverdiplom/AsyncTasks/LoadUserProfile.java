@@ -14,7 +14,7 @@ import java.util.Map;
 import youtube.demo.serverdiplom.JsonReader;
 
 import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMyProfile;
-import static youtube.demo.serverdiplom.AsyncTasks.LoadAllProducts.myId;
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_user_id;
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
 
@@ -43,6 +43,7 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
         try {
             json = JsonReader.read(final_URL);
             JSONArray markers = json.getJSONArray(TAG_PRODUCTS);
+
             // looping through All Products
             for (int i = 0; i < markers.length(); i++) {
                 ArrayList<String> line = new ArrayList<>();
@@ -50,9 +51,15 @@ public class LoadUserProfile extends AsyncTask<Void, Void, ArrayList<ArrayList<S
                 String count = c.getString("count");
                 String name = c.getString("name");
                 String surname = c.getString("surname");
+                String secondname = c.getString("secondname");
+                String phone = c.getString("phone");
+                String mail = c.getString("mail");
                 line.add(0,count);
                 line.add(1,name);
                 line.add(2,surname);
+                line.add(3,secondname);
+                line.add(4,phone);
+                line.add(5,mail);
                 array.add(0,line);
             }
             markers = json.getJSONArray("avg");

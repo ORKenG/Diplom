@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
+import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.JsonReader;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_user_id;
@@ -24,7 +25,7 @@ public class Insert_into_blacklist extends AsyncTask<Void, Void, Void> {
 
         final Map<String, String> params = Maps.newHashMap();
         params.put("idu2", current_user_id);
-        params.put("idu1", LoadAllProducts.myId);
+        params.put("idu1", GmapFragment.myId);
 
         // getting JSON Object
         // Note that create product url accepts POST method

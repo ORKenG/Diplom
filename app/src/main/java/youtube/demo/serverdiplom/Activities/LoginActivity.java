@@ -31,7 +31,6 @@ import java.util.Map;
 
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.JsonReader;
-import youtube.demo.serverdiplom.AsyncTasks.LoadAllProducts;
 import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
@@ -214,14 +213,14 @@ public class LoginActivity extends AppCompatActivity {
                 System.out.println("s1=" +success);
 
                 if (success == 1) {
-                    LoadAllProducts.myId = json.getString("idu");
+                    GmapFragment.myId = json.getString("idu");
                     GmapFragment.userPhone = json.getString("phone");
                     SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("login", mEmail);
                     editor.putString("password", mPassword);
                     editor.apply();
-                    System.out.println("Success = " + success + "myId = " + LoadAllProducts.myId + " myPhone = " + GmapFragment.userPhone);
+                    System.out.println("Success = " + success + "myId = " + GmapFragment.myId + " myPhone = " + GmapFragment.userPhone);
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);
                     startActivity(intent);
                 }

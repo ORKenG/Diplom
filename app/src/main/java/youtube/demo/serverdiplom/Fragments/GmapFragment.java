@@ -45,6 +45,7 @@ import static youtube.demo.serverdiplom.Activities.MainActivity.flag;
 
 public class GmapFragment extends Fragment implements OnMapReadyCallback {
 
+    public static String myId="";
     GoogleMap mMap;
     public static Integer marker_type[] = {1, 2, 3};
     FloatingActionButton button;

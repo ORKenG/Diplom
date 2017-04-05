@@ -26,7 +26,7 @@ public class CreateNewReview extends AsyncTask<String, Void, Void> {
         final Map<String, String> params = Maps.newHashMap();
         params.put("text", text);
         params.put("idu_to", GmapFragment.current_user_id);
-        params.put("idu_from", LoadAllProducts.myId);
+        params.put("idu_from", GmapFragment.myId);
         params.put("mark", args[1]);
 
         // getting JSON Object

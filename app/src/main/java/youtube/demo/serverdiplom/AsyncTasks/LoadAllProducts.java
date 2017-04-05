@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import youtube.demo.serverdiplom.Activities.MainActivity;
+import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.JsonReader;
 
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.marker_type;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.stringForSearch;
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
 
 public class LoadAllProducts extends AsyncTask<Object, Object, ArrayList<ArrayList<String>>> {
 
-    public static String myId="";
     /**
      * Before starting background thread Show Progress Dialog
      * */
@@ -42,14 +43,25 @@ public class LoadAllProducts extends AsyncTask<Object, Object, ArrayList<ArrayLi
         if (!stringForSearch.equals("")){
             params.put("name", stringForSearch);
         }
-        params.put("idu", myId);
+        String type="";
+        for (int i = 0; i < GmapFragment.marker_type.length; i++) {
+            if (marker_type[i]!=null){
+                type+=String.valueOf(i+1);
+                if (i+1!=GmapFragment.marker_type.length)
+                type+=",";
+            }
+        }
+        System.out.println("fasf" + type);
+        params.put("idu", GmapFragment.myId);
+
         params.put("flag", String.valueOf(MainActivity.flag));
         String url_all_products = "http://7kmcosmetics.com/get_markers.php";
-        String final_URL = url_all_products + "?" + encodeParams(params);
+        String final_URL = url_all_products + "?" + encodeParams(params) + "&type=" + type;
         JSONObject json;
 
         try {
             json = JsonReader.read(final_URL);
+            System.out.println("final = " + final_URL);
             JSONArray markers = json.getJSONArray("marker");
                 // looping through All Products
                 for (int i = 0; i < markers.length(); i++) {

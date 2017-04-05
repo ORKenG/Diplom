@@ -16,6 +16,8 @@ import youtube.demo.serverdiplom.MyAdapter2;
 import youtube.demo.serverdiplom.MyAdapter3;
 import youtube.demo.serverdiplom.R;
 
+import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMap;
+
 /**
  * Created by Cypher on 10.03.2017.
  */
@@ -23,17 +25,19 @@ import youtube.demo.serverdiplom.R;
 public class MyUser_Profile extends AppCompatActivity {
     TextView job_count;
     TextView name_user;
-    TextView surname_user;
+
     ListView blacklist;
     ListView view_review;
     Button show_review;
     Button show_blacklist;
-
+    Button changeProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile);
+        flagForMap = true;
+        changeProfile = (Button) findViewById(R.id.change_profile);
 
         show_blacklist = (Button) findViewById(R.id.show_blacklist);
         show_review = (Button) findViewById(R.id.show_review);
@@ -53,13 +57,25 @@ public class MyUser_Profile extends AppCompatActivity {
         });
         job_count = (TextView) findViewById(R.id.job_count);
         name_user = (TextView) findViewById(R.id.name_user);
-        surname_user = (TextView) findViewById(R.id.surname_user);
+
         view_review = (ListView) findViewById(R.id.view_review);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String txt = "Number of jobs added: " + intent.getStringExtra("count");
         job_count.setText(txt);
-        name_user.setText(intent.getStringExtra("name"));
-        surname_user.setText(intent.getStringExtra("surname"));
+        name_user.setText(intent.getStringExtra("surname") + " " + intent.getStringExtra("name") + " " + intent.getStringExtra("secondname"));
+
+        changeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getBaseContext(), ChangeProfileActivity.class);
+                intent1.putExtra("name", intent.getStringExtra("name"));
+                intent1.putExtra("surname", intent.getStringExtra("surname"));
+                intent1.putExtra("secondname", intent.getStringExtra("secondname"));
+                intent1.putExtra("phone", intent.getStringExtra("phone"));
+                intent1.putExtra("mail", intent.getStringExtra("mail"));
+                startActivity(intent1);
+            }
+        });
         MyAdapter2 adapter = new MyAdapter2(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
         view_review.setAdapter(adapter);
         blacklist = (ListView) findViewById(R.id.blacklist);

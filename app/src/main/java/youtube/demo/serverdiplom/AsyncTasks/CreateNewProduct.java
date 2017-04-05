@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
+import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.JsonReader;
 
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
@@ -42,7 +43,7 @@ public class CreateNewProduct extends AsyncTask<String, String, String> {
         params.put("position_y", position_y);
         params.put("type", type);
         params.put("phone", phone);
-        params.put("idu", LoadAllProducts.myId);
+        params.put("idu", GmapFragment.myId);
         params.put("real_position_x", real_posistion_x);
         params.put("real_position_y", real_posistion_y);
         params.put("address", address);

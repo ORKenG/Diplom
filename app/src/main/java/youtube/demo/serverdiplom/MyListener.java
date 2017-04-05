@@ -16,12 +16,12 @@ import youtube.demo.serverdiplom.Fragments.GmapFragment;
  */
 
 public class MyListener implements View.OnClickListener {
-    Marker marker;
-    String type;
-    String name;
-    String phone;
-    String price;
-    GmapFragment gmapFragment;
+    private Marker marker;
+    private String type;
+    private String name;
+    private String phone;
+    private String price;
+    private GmapFragment gmapFragment;
     public MyListener(Marker marker, String type, String name, String phone, GmapFragment gmapFragment, String price){
         this.marker = marker;
         this.type = type;

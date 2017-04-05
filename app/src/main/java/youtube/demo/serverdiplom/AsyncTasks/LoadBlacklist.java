@@ -13,7 +13,7 @@ import java.util.Map;
 
 import youtube.demo.serverdiplom.JsonReader;
 
-import static youtube.demo.serverdiplom.AsyncTasks.LoadAllProducts.myId;
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
 
 /**

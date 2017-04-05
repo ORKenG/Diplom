@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="12dp"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:id="@+id/pswd"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/enter_password"
+            android:layout_width="match_parent"
+            android:layout_below="@id/enter_Email"
+            android:layout_height="48dp"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:id="@+id/pswd2"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/enter_password2"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="@string/enter_password_again"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+    <EditText
+        android:id="@+id/enter_name"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/enter_name" />
+    <EditText
+        android:id="@+id/enter_surname"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/enter_surname" />
+    <EditText
+        android:id="@+id/enter_secondname"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/enter_second_name" />
+    <EditText
+        android:id="@+id/enter_phonenubmer"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/enter_phone" />
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/registration" />
+</LinearLayout>

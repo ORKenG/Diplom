@@ -69,6 +69,16 @@
                 android:value="youtube.demo.serverdiplom.Activities.MainActivity" />
         </activity>
         <activity
+            android:name="youtube.demo.serverdiplom.Activities.ChangeProfileActivity"
+            android:label="Изменить данные"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+           >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="youtube.demo.serverdiplom.Activities.MainActivity" />
+        </activity>
+        <activity
             android:name="youtube.demo.serverdiplom.Activities.ListOfJobsActivity"
             android:label="Список работ"
             android:screenOrientation="portrait"

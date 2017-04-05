@@ -16,8 +16,8 @@ import java.util.concurrent.ExecutionException;
 
 import youtube.demo.serverdiplom.AsyncTasks.CreateNewReview;
 import youtube.demo.serverdiplom.AsyncTasks.Insert_into_blacklist;
-import youtube.demo.serverdiplom.AsyncTasks.LoadAllProducts;
 import youtube.demo.serverdiplom.AsyncTasks.LoadUserProfile;
+import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.MyAdapter2;
 import youtube.demo.serverdiplom.R;
 
@@ -60,7 +60,7 @@ public class User_Profile extends AppCompatActivity {
         ArrayList<String> id = intent.getStringArrayListExtra("id");
         final ViewGroup layout = (ViewGroup) avg_mark.getParent();
         for (int i=0; i<id.size(); i++){
-            if (id.get(i).equals(LoadAllProducts.myId)){
+            if (id.get(i).equals(GmapFragment.myId)){
                 layout.removeView(inputReview);
                 layout.removeView(sendReview);
                 layout.removeView(mark);

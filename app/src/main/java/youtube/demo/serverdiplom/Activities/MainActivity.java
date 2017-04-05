@@ -26,9 +26,10 @@ import youtube.demo.serverdiplom.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static boolean flagForMap = true;
+    public static boolean flag = true;
+    public static boolean flagForMyProfile;
 
-public static boolean flag=true;
-        public static boolean flagForMyProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +48,45 @@ public static boolean flag=true;
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if (flagForMap) {
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
+        } else {
+            flagForMyProfile = true;
+            Intent intent = new Intent(getBaseContext(), MyUser_Profile.class);
+            LoadUserProfile l = new LoadUserProfile();
+            l.execute();
+            ArrayList<ArrayList<String>> counts = new ArrayList<>();
+            counts.ensureCapacity(9);
+            try {
+                counts = l.get();
+                ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
+                ArrayList<String> idd = new ArrayList<>();
+                counts2.ensureCapacity(9);
+                for (int i = 2; i < counts.size(); i++) {
+                    ArrayList<String> line = new ArrayList<>();
+                    line.add(0, counts.get(i).get(1));
+                    line.add(1, counts.get(i).get(0));
+                    line.add(2, counts.get(i).get(3));
+                    line.add(3, counts.get(i).get(4));
+                    counts2.add(i - 2, line);
+                    idd.add(i - 2, counts.get(i).get(2));
+                }
+                intent.putExtra("review", counts2);
+                intent.putExtra("id", idd);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
+            intent.putExtra("count", counts.get(0).get(0));
+            intent.putExtra("name", counts.get(0).get(1));
+            intent.putExtra("surname", counts.get(0).get(2));
+            intent.putExtra("secondname", counts.get(0).get(3));
+            intent.putExtra("phone", counts.get(0).get(4));
+            intent.putExtra("mail", counts.get(0).get(5));
+            intent.putExtra("avg", counts.get(1).get(0));
+            startActivity(intent);
+        }
 
 
     }
@@ -82,7 +119,7 @@ public static boolean flag=true;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(getBaseContext(),SettingActivity.class));
+            startActivity(new Intent(getBaseContext(), SettingActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -101,31 +138,34 @@ public static boolean flag=true;
             LoadUserProfile l = new LoadUserProfile();
             l.execute();
             ArrayList<ArrayList<String>> counts = new ArrayList<>();
-            counts.ensureCapacity(4);
+            counts.ensureCapacity(9);
             try {
                 counts = l.get();
                 ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
                 ArrayList<String> idd = new ArrayList<>();
-                counts2.ensureCapacity(4);
-                for (int i = 2; i<counts.size(); i++){
+                counts2.ensureCapacity(9);
+                for (int i = 2; i < counts.size(); i++) {
                     ArrayList<String> line = new ArrayList<>();
                     line.add(0, counts.get(i).get(1));
                     line.add(1, counts.get(i).get(0));
                     line.add(2, counts.get(i).get(3));
                     line.add(3, counts.get(i).get(4));
-                    counts2.add(i-2,line);
-                    idd.add(i-2,counts.get(i).get(2));
+                    counts2.add(i - 2, line);
+                    idd.add(i - 2, counts.get(i).get(2));
                 }
-                intent.putExtra("review",counts2);
-                intent.putExtra("id",idd);
+                intent.putExtra("review", counts2);
+                intent.putExtra("id", idd);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
-            intent.putExtra("count",counts.get(0).get(0));
-            intent.putExtra("name",counts.get(0).get(1));
-            intent.putExtra("surname",counts.get(0).get(2));
-            intent.putExtra("avg",counts.get(1).get(0));
+            intent.putExtra("count", counts.get(0).get(0));
+            intent.putExtra("name", counts.get(0).get(1));
+            intent.putExtra("surname", counts.get(0).get(2));
+            intent.putExtra("secondname", counts.get(0).get(3));
+            intent.putExtra("phone", counts.get(0).get(4));
+            intent.putExtra("mail", counts.get(0).get(5));
+            intent.putExtra("avg", counts.get(1).get(0));
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
@@ -135,10 +175,10 @@ public static boolean flag=true;
             editor.remove("login");
             editor.remove("password");
             editor.apply();
-            Intent intent = new Intent(getBaseContext(),LoginActivity.class);
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            flag=!flag;
+            flag = !flag;
 
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
 

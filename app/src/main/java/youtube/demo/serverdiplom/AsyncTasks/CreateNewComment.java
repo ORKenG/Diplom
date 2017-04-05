@@ -25,7 +25,7 @@ public class CreateNewComment extends AsyncTask<String, Void, Void> {
         final Map<String, String> params = Maps.newHashMap();
         params.put("text", text);
         params.put("id", GmapFragment.current_id);
-        params.put("idu", LoadAllProducts.myId);
+        params.put("idu", GmapFragment.myId);
 
         // getting JSON Object
         // Note that create product url accepts POST method
