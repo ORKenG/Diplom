@@ -77,10 +77,19 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     public static double real_position_x;
     public static double real_position_y;
     public int counts;
+    public static boolean flagForChange = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (flagForChange) {
+            Intent intent = new Intent(getActivity(), SetMarkerActivity.class);
+            Intent intent2 = getActivity().getIntent();
+            intent.putExtra("name", intent2.getStringExtra("name"));
+            intent.putExtra("address", intent2.getStringExtra("address"));
+            intent.putExtra("price", intent2.getStringExtra("price"));
+            startActivityForResult(intent, 1);
+        }
         return inflater.inflate(R.layout.fragment_gmaps, container, false);
     }
 
@@ -110,8 +119,6 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                 CreateNewProduct createNewProduct = new CreateNewProduct();
                 createNewProduct.execute(args);
                 dbRead();
-
-
                 break;
             case 2:
                 Marker marker = mMap.addMarker(new MarkerOptions().

@@ -26,6 +26,7 @@ import youtube.demo.serverdiplom.R;
 import static youtube.demo.serverdiplom.Activities.MainActivity.flag;
 import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMyProfile;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_user_id;
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.flagForChange;
 
 /**
  * Created by Cypher on 04.12.2016.
@@ -35,6 +36,7 @@ public class JobActivity extends AppCompatActivity {
 
     TextView job_name;
     TextView phone;
+    TextView price;
     FloatingActionButton call;
     FloatingActionButton sms;
     Button delete;
@@ -44,14 +46,16 @@ public class JobActivity extends AppCompatActivity {
     EditText commentText;
     Button sendComment;
     TextView address;
+    Button change;
     public static String textForTitle;
     public static String textForPhone;
     public static String textForAddress;
+    public static String textForPrice;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent bundle = getIntent();
+        final Intent bundle = getIntent();
         setContentView(R.layout.activity_job);
         ArrayList<ArrayList<String>> name = new ArrayList<>();
         CommentLoad commentLoad = new CommentLoad();
@@ -69,6 +73,7 @@ public class JobActivity extends AppCompatActivity {
         comment = (ListView) findViewById(R.id.view_comment);
         MyAdapter adapter = new MyAdapter(this, name);
         comment.setAdapter(adapter);
+        price = (TextView) findViewById(R.id.price);
         commentText = (EditText) findViewById(R.id.commentInput);
         sendComment = (Button) findViewById(R.id.sendComment);
         sendComment.setOnClickListener(new View.OnClickListener() {
@@ -84,21 +89,40 @@ public class JobActivity extends AppCompatActivity {
             textForPhone = bundle.getStringExtra("phone");
             textForAddress = bundle.getStringExtra("address");
             textForTitle = bundle.getStringExtra("name");
+            textForPrice = bundle.getStringExtra("price");
         }
         phone.setText(textForPhone);
         address.setText(textForAddress);
         job_name.setText(textForTitle);
-
+        price.setText("Вознаграждение: " + textForPrice + " грн.");
+        change = (Button) findViewById(R.id.change);
         call = ((FloatingActionButton) findViewById(R.id.call));
         sms = ((FloatingActionButton) findViewById(R.id.sms));
         delete = ((Button) findViewById(R.id.delete));
         show_profile = ((Button) findViewById(R.id.show_profile));
-        ViewGroup layout = (ViewGroup) delete.getParent();
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                flagForChange = true;
+
+                intent.putExtra("address",bundle.getStringExtra("address"));
+                intent.putExtra("name",bundle.getStringExtra("name"));
+                intent.putExtra("price",bundle.getStringExtra("price"));
+                startActivity(intent);
+            }
+        });
+        System.out.println("flag = " + flag);
+        ViewGroup layout = (ViewGroup) job_name.getParent();
         if (!flag) {
-            layout.removeView(delete);
+
+            delete.setVisibility(View.GONE);
+
+            change.setVisibility(View.GONE);
         } else {
-            layout.removeView(show_profile);
-            layout.removeViewInLayout(findViewById(R.id.linear));
+            show_profile.setVisibility(View.GONE);
+            findViewById(R.id.linear).setVisibility(View.GONE);
+
         }
         call.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +179,7 @@ public class JobActivity extends AppCompatActivity {
         LoadUserProfile l = new LoadUserProfile();
         l.execute();
         ArrayList<ArrayList<String>> counts = new ArrayList<>();
-        counts.ensureCapacity(4);
+        counts.ensureCapacity(5);
         counts = l.get();
         Intent intent = new Intent(this, User_Profile.class);
         intent.putExtra("count", counts.get(0).get(0));
@@ -164,13 +188,15 @@ public class JobActivity extends AppCompatActivity {
         intent.putExtra("avg", counts.get(1).get(0));
         ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
         ArrayList<String> id = new ArrayList<>();
-        counts2.ensureCapacity(4);
+        counts2.ensureCapacity(5);
         for (int i = 2; i < counts.size(); i++) {
             ArrayList<String> line = new ArrayList<>();
             line.add(0, counts.get(i).get(1));
             line.add(1, counts.get(i).get(0));
             line.add(2, counts.get(i).get(3));
             line.add(3, counts.get(i).get(4));
+            line.add(4, counts.get(i).get(2));
+            line.add(5, counts.get(i).get(5));
             counts2.add(i - 2, line);
             id.add(i - 2, counts.get(i).get(2));
         }

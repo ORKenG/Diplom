@@ -1,7 +1,10 @@
 package youtube.demo.serverdiplom;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +39,11 @@ public class MyAdapter2 extends ArrayAdapter<ArrayList<String>> {
         TextView name = (TextView) rowView.findViewById(R.id.adapterName);
         TextView text = (TextView) rowView.findViewById(R.id.adapterText);
         TextView date = (TextView) rowView.findViewById(R.id.adapterDate);
+        ImageView photo = (ImageView) rowView.findViewById(R.id.photo);
+        String forImage = values.get(position).get(5);
+        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        photo.setImageBitmap(decodedByte);
         ImageView starOne = (ImageView) rowView.findViewById(R.id.starOne);
         ImageView starTwo = (ImageView) rowView.findViewById(R.id.starTwo);
         ImageView starThree = (ImageView) rowView.findViewById(R.id.starThree);

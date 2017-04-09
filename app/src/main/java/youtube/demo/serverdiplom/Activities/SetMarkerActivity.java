@@ -26,6 +26,8 @@ import youtube.demo.serverdiplom.AsyncTasks.AddressToLatLng;
 import youtube.demo.serverdiplom.AsyncTasks.PlaceAutocomplete;
 import youtube.demo.serverdiplom.R;
 
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.flagForChange;
+
 public class SetMarkerActivity extends AppCompatActivity {
 
     EditText editText;
@@ -40,6 +42,7 @@ public class SetMarkerActivity extends AppCompatActivity {
     String[] values = new String[2];
     ArrayList<String> lst;
     EditText enter_price;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +136,12 @@ public class SetMarkerActivity extends AppCompatActivity {
                 input(3);
             }
         });
+        if (flagForChange){
+            Intent intent = getIntent();
+            editText.setText(intent.getStringExtra("name"));
+            enter_price.setText(intent.getStringExtra("price"));
+            address_autocompleteTextView.setText(intent.getStringExtra("address"));
+        }
     }
     public void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {

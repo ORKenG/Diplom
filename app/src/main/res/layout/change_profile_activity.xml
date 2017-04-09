@@ -3,7 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:padding="12dp"
     android:layout_height="match_parent">
-
+<ImageView
+    android:id="@+id/show_photo"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_gravity="center"/>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:id="@+id/pswd"
@@ -48,8 +52,13 @@
         android:layout_height="48dp"
         android:hint="@string/enter_phone" />
     <Button
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выбрать фотографию"/>
+    <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="@string/registration" />
+        android:text="Подтвердить изменения" />
 </LinearLayout>

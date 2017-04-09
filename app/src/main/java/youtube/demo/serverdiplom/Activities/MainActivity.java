@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if (flagForMap) {
+
             FragmentManager fm = getFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else {
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("secondname", counts.get(0).get(3));
             intent.putExtra("phone", counts.get(0).get(4));
             intent.putExtra("mail", counts.get(0).get(5));
+            intent.putExtra("photo", counts.get(0).get(6));
             intent.putExtra("avg", counts.get(1).get(0));
             startActivity(intent);
         }
@@ -165,6 +167,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("secondname", counts.get(0).get(3));
             intent.putExtra("phone", counts.get(0).get(4));
             intent.putExtra("mail", counts.get(0).get(5));
+            intent.putExtra("photo", counts.get(0).get(6));
             intent.putExtra("avg", counts.get(1).get(0));
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {

@@ -1,12 +1,18 @@
 package youtube.demo.serverdiplom.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +31,7 @@ import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMap;
 public class MyUser_Profile extends AppCompatActivity {
     TextView job_count;
     TextView name_user;
-
+    ImageView photo;
     ListView blacklist;
     ListView view_review;
     Button show_review;
@@ -38,6 +44,7 @@ public class MyUser_Profile extends AppCompatActivity {
         setContentView(R.layout.my_profile);
         flagForMap = true;
         changeProfile = (Button) findViewById(R.id.change_profile);
+        photo = (ImageView) findViewById(R.id.photo);
 
         show_blacklist = (Button) findViewById(R.id.show_blacklist);
         show_review = (Button) findViewById(R.id.show_review);
@@ -62,7 +69,11 @@ public class MyUser_Profile extends AppCompatActivity {
         final Intent intent = getIntent();
         String txt = "Number of jobs added: " + intent.getStringExtra("count");
         job_count.setText(txt);
-        name_user.setText(intent.getStringExtra("surname") + " " + intent.getStringExtra("name") + " " + intent.getStringExtra("secondname"));
+        String forImage = intent.getStringExtra("photo");
+        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        photo.setImageBitmap(decodedByte);
+                name_user.setText(intent.getStringExtra("surname") + " " + intent.getStringExtra("name") + " " + intent.getStringExtra("secondname"));
 
         changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +84,7 @@ public class MyUser_Profile extends AppCompatActivity {
                 intent1.putExtra("secondname", intent.getStringExtra("secondname"));
                 intent1.putExtra("phone", intent.getStringExtra("phone"));
                 intent1.putExtra("mail", intent.getStringExtra("mail"));
+                intent1.putExtra("photo", intent.getStringExtra("photo"));
                 startActivity(intent1);
             }
         });

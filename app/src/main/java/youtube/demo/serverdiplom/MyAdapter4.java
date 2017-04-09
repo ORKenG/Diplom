@@ -68,6 +68,7 @@ public class MyAdapter4 extends ArrayAdapter<ArrayList<String>> {
                 bundle.putExtra("phone", phone);
                 bundle.putExtra("address", address);
                 bundle.putExtra("name", nameu);
+                bundle.putExtra("price", values.get(position).get(7));
                 current_id = values.get(position).get(5);
                 current_user_id = values.get(position).get(6);
                 getContext().startActivity(bundle);

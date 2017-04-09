@@ -43,9 +43,11 @@ public class LoadBlacklist extends AsyncTask<Void, Void, ArrayList<ArrayList<Str
                 String name = c.getString("name");
                 String surname = c.getString("surname");
                 String id = c.getString("id");
+                String photo = c.getString("photo");
                 line.add(0,name);
                 line.add(1,surname);
                 line.add(2,id);
+                line.add(3,photo);
                 array.add(line);
                 System.out.println("TESTTEST=" + name);
             }

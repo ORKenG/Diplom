@@ -2,11 +2,15 @@ package youtube.demo.serverdiplom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,6 +47,11 @@ public class MyAdapter extends ArrayAdapter<ArrayList<String>> {
         TextView name = (TextView) rowView.findViewById(R.id.adapterName);
         TextView text = (TextView) rowView.findViewById(R.id.adapterText);
         TextView date = (TextView) rowView.findViewById(R.id.adapterDate);
+        ImageView photo = (ImageView) rowView.findViewById(R.id.photo);
+        String forImage = values.get(position).get(4);
+        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        photo.setImageBitmap(decodedByte);
        name.setText(values.get(position).get(0));
        text.setText(values.get(position).get(1));
        date.setText(values.get(position).get(2));
@@ -70,13 +79,15 @@ public class MyAdapter extends ArrayAdapter<ArrayList<String>> {
                 intent.putExtra("avg",counts.get(1).get(0));
                 ArrayList<ArrayList<String>> counts2 = new ArrayList<>();
                 ArrayList<String> id = new ArrayList<>();
-                counts2.ensureCapacity(4);
+                counts2.ensureCapacity(5);
                 for (int i = 2; i<counts.size(); i++){
                     ArrayList<String> line = new ArrayList<>();
                     line.add(0, counts.get(i).get(1));
                     line.add(1, counts.get(i).get(0));
                     line.add(2, counts.get(i).get(3));
                     line.add(3, counts.get(i).get(4));
+                    line.add(4, counts.get(i).get(2));
+                    line.add(5, counts.get(i).get(5));
                     counts2.add(i-2,line);
                     id.add(i-2,counts.get(i).get(2));
                 }

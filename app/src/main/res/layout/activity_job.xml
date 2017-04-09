@@ -2,9 +2,11 @@
 
 <ScrollView android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:padding="6dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillViewport="true">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,6 +34,12 @@
 
 
 </LinearLayout>
+    <TextView
+        android:id="@+id/price"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cena"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,11 +80,26 @@
         android:text="@string/sms"
         android:id="@+id/sms" />
     </LinearLayout>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
+
         android:text="@string/delete"
         android:id="@+id/delete" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="Редактировать"
+            android:id="@+id/change" />
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"

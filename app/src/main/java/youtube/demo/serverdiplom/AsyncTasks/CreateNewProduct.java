@@ -12,6 +12,8 @@ import java.util.Map;
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
 import youtube.demo.serverdiplom.JsonReader;
 
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_id;
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.flagForChange;
 import static youtube.demo.serverdiplom.JsonReader.encodeParams;
 
 /**
@@ -48,9 +50,13 @@ public class CreateNewProduct extends AsyncTask<String, String, String> {
         params.put("real_position_y", real_posistion_y);
         params.put("address", address);
         params.put("price", price);
-
-
-        String url_create_product = "http://7kmcosmetics.com/create_product.php";
+        params.put("id", current_id);
+        String url_create_product;
+        if (!flagForChange) {
+             url_create_product = "http://7kmcosmetics.com/create_product.php";
+        } else {
+            url_create_product = "http://7kmcosmetics.com/update_product.php";
+        }
         String final_URL = url_create_product + "?" + encodeParams(params);
         JSONObject json;
         try {
@@ -60,8 +66,7 @@ public class CreateNewProduct extends AsyncTask<String, String, String> {
             e.printStackTrace();
         }
 
-
-
+        flagForChange = false;
         return null;
     }
 

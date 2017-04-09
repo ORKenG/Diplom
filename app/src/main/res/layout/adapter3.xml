@@ -8,6 +8,7 @@
         android:layout_margin="10dp"
         android:layout_width="55dp"
         android:layout_height="55dp"
+        android:id="@+id/photo"
         app:srcCompat="@drawable/ic_person_black_24dp"/>
     <TextView
         android:id="@id/adapterName"
