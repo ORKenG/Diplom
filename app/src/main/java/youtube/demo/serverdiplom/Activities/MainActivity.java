@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
                     line.add(1, counts.get(i).get(0));
                     line.add(2, counts.get(i).get(3));
                     line.add(3, counts.get(i).get(4));
+                    line.add(4, counts.get(i).get(2));
+                    line.add(5, counts.get(i).get(5));
                     counts2.add(i - 2, line);
                     idd.add(i - 2, counts.get(i).get(2));
                 }
@@ -152,6 +154,8 @@ public class MainActivity extends AppCompatActivity
                     line.add(1, counts.get(i).get(0));
                     line.add(2, counts.get(i).get(3));
                     line.add(3, counts.get(i).get(4));
+                    line.add(4, counts.get(i).get(2));
+                    line.add(5, counts.get(i).get(5));
                     counts2.add(i - 2, line);
                     idd.add(i - 2, counts.get(i).get(2));
                 }

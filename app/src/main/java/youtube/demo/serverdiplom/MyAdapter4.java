@@ -56,8 +56,8 @@ public class MyAdapter4 extends ArrayAdapter<ArrayList<String>> {
                 getContext().startActivity(intent);
             }
         });
-        name.setText(values.get(position).get(0));
-        price.setText(values.get(position).get(7));
+        name.setText("Название: " + values.get(position).get(0));
+        price.setText("Цена: " + values.get(position).get(7));
         final String phone = values.get(position).get(3);
         final String address = values.get(position).get(8);
         final String nameu = values.get(position).get(0);
