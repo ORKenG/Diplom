@@ -48,6 +48,8 @@
     <string name="close">Выйти</string>
     <string name="input_comment">Введите комментарий</string>
     <string name="send">Отправить</string>
+    <string name="phone_login">Номер телефона</string>
+    <string name="forgot_password">Забыли пароль</string>
 
     <!-- Strings related to Settings -->
 

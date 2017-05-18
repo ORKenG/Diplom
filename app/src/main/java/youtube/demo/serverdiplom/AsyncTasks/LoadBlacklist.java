@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 /**
  * Created by Cypher on 19.03.2017.
@@ -33,7 +33,7 @@ public class LoadBlacklist extends AsyncTask<Void, Void, ArrayList<ArrayList<Str
         String final_URL = url_all_products + "?" + encodeParams(params);
         JSONObject json;
         try {
-            json = JsonReader.read(final_URL);
+            json = Requests.read(final_URL);
             JSONArray markers = json.getJSONArray("blacklist");
             // looping through All Products
             for (int i = 0; i < markers.length(); i++) {

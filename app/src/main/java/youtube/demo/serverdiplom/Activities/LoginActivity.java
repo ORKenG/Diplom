@@ -5,11 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.espresso.core.deps.guava.collect.Maps;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,11 +27,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
+import youtube.demo.serverdiplom.AsyncTasks.ForgotPassword;
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 import youtube.demo.serverdiplom.R;
 
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private UserLoginTask mAuthTask = null;
 
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mPhoneView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPhoneView = (AutoCompleteTextView) findViewById(R.id.phone);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -65,11 +64,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button singInButton = (Button) findViewById(R.id.email_sign_in_button);
+        singInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+        Button forgot_passwordButon = (Button) findViewById(R.id.forgot_password);
+        forgot_passwordButon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPhoneView.getText().toString().length() == 10) {
+                    ForgotPassword forgotPassword = new ForgotPassword();
+                    forgotPassword.execute(mPhoneView.getText().toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), "Введите свой номер телефона", Toast.LENGTH_LONG).show();
+                }
             }
         });
         Button regButton = (Button) findViewById(R.id.register_button);
@@ -90,15 +101,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            }
-        }
-    }
     private void goToRegPage() {
         Intent intent = new Intent(getBaseContext(), RegistrationActivity.class);
         startActivity(intent);
@@ -109,10 +111,10 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        mEmailView.setError(null);
+        mPhoneView.setError(null);
         mPasswordView.setError(null);
 
-        String email = mEmailView.getText().toString();
+        String phone = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -124,13 +126,9 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(phone)) {
+            mPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mPhoneView;
             cancel = true;
         }
 
@@ -138,15 +136,11 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(phone, password);
             mAuthTask.execute();
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
@@ -184,13 +178,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
-        private final String mEmail;
+        private final String mPhone;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String phone, String password) {
+            mPhone = phone;
             mPassword = password;
         }
 
@@ -199,15 +194,15 @@ public class LoginActivity extends AppCompatActivity {
             int success = 0;
             final Map<String, String> params = Maps.newHashMap();
             // getting JSON string from URL
-            System.out.println("Done correctly: " + mEmail + mPassword);
-            params.put("mail", mEmail);
+            System.out.println("Done correctly: " + mPhone + mPassword);
+            params.put("phone", mPhone);
             params.put("password", mPassword);
             String url_all_products = "http://7kmcosmetics.com/diplom_login.php";
             String final_URL = url_all_products + "?" + encodeParams(params);
             JSONObject json;
 
             try {
-                json = JsonReader.read(final_URL);
+                json = Requests.read(final_URL);
                 // Simulate network access.
                 success = json.getInt("success");
                 System.out.println("s1=" +success);
@@ -217,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                     GmapFragment.userPhone = json.getString("phone");
                     SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("login", mEmail);
+                    editor.putString("login", mPhone);
                     editor.putString("password", mPassword);
                     editor.apply();
                     System.out.println("Success = " + success + "myId = " + GmapFragment.myId + " myPhone = " + GmapFragment.userPhone);

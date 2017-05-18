@@ -9,21 +9,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="youtube.demo.serverdiplom.Activities.RegistrationActivity">
-<EditText
-    android:id="@+id/enter_Email"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:hint="@string/enter_email"
-    android:inputType="textEmailAddress" />
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
    android:id="@+id/pswd"
-        android:layout_below="@id/enter_Email"
+
         android:layout_height="wrap_content">
     <EditText
         android:id="@+id/enter_password"
         android:layout_width="match_parent"
-        android:layout_below="@id/enter_Email"
+
         android:layout_height="48dp"
         android:hint="@string/enter_password"
         android:inputType="textPassword" />
@@ -63,11 +58,32 @@
         android:layout_width="match_parent"
         android:layout_below="@id/enter_secondname"
         android:layout_height="48dp"
+        android:inputType="number"
         android:hint="@string/enter_phone" />
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_below="@+id/enter_phonenubmer"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/accept"
+            android:enabled="false"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:text="Подтвердить"/>
+        <EditText
+            android:id="@+id/pin"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="PIN code"
+            android:inputType="numberPassword" />
+    </LinearLayout>
     <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="@string/registration"
-        android:layout_below="@id/enter_phonenubmer"/>
+        android:layout_below="@id/layout"/>
 </RelativeLayout>

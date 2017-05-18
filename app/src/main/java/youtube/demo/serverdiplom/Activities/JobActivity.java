@@ -20,7 +20,7 @@ import youtube.demo.serverdiplom.AsyncTasks.CommentLoad;
 import youtube.demo.serverdiplom.AsyncTasks.CreateNewComment;
 import youtube.demo.serverdiplom.AsyncTasks.DeleteMarker;
 import youtube.demo.serverdiplom.AsyncTasks.LoadUserProfile;
-import youtube.demo.serverdiplom.MyAdapter;
+import youtube.demo.serverdiplom.AdapterForComments;
 import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.Activities.MainActivity.flag;
@@ -71,7 +71,7 @@ public class JobActivity extends AppCompatActivity {
             current_user_id = user_id;
         }
         comment = (ListView) findViewById(R.id.view_comment);
-        MyAdapter adapter = new MyAdapter(this, name);
+        AdapterForComments adapter = new AdapterForComments(this, name);
         comment.setAdapter(adapter);
         price = (TextView) findViewById(R.id.price);
         commentText = (EditText) findViewById(R.id.commentInput);
@@ -162,6 +162,7 @@ public class JobActivity extends AppCompatActivity {
         createNewComment.execute(args);
         CommentLoad commentLoad = new CommentLoad();
         commentLoad.execute();
+        commentText.setText("");
         ArrayList<ArrayList<String>> name = new ArrayList<>();
         try {
             name = commentLoad.get();
@@ -169,7 +170,7 @@ public class JobActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        MyAdapter adapter = new MyAdapter(this, name);
+        AdapterForComments adapter = new AdapterForComments(this, name);
         comment.setAdapter(adapter);
 
     }

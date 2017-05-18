@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.Map;
 
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_user_id;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 /**
  * Created by Cypher on 18.03.2017.
@@ -33,7 +33,7 @@ public class Insert_into_blacklist extends AsyncTask<Void, Void, Void> {
         String final_URL = url_create_product + "?" + encodeParams(params);
         JSONObject json;
         try {
-            json = JsonReader.read(final_URL);
+            json = Requests.read(final_URL);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("surname", counts.get(0).get(2));
             intent.putExtra("secondname", counts.get(0).get(3));
             intent.putExtra("phone", counts.get(0).get(4));
-            intent.putExtra("mail", counts.get(0).get(5));
             intent.putExtra("photo", counts.get(0).get(6));
             intent.putExtra("avg", counts.get(1).get(0));
             startActivity(intent);

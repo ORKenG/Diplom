@@ -9,9 +9,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 /**
  * Created by Cypher on 20.02.2017.
@@ -33,7 +33,7 @@ public class PlaceAutocomplete extends AsyncTask<String, Void, String[]> {
             final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
             System.out.println(url);// Путь, что бы можно было посмотреть в браузере ответ службы
             try {
-                response = JsonReader.read(url);
+                response = Requests.read(url);
                 for (int i = 0; i <4 ; i++) {
 
                     if(response.getJSONArray("predictions").getJSONObject(i) != null){

@@ -28,7 +28,7 @@
         android:id="@+id/change_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Редактировать профль"/>
+        android:text="Редактировать профиль"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

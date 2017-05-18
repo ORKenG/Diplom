@@ -18,7 +18,7 @@ import youtube.demo.serverdiplom.AsyncTasks.CreateNewReview;
 import youtube.demo.serverdiplom.AsyncTasks.Insert_into_blacklist;
 import youtube.demo.serverdiplom.AsyncTasks.LoadUserProfile;
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
-import youtube.demo.serverdiplom.MyAdapter2;
+import youtube.demo.serverdiplom.AdapterForReview;
 import youtube.demo.serverdiplom.R;
 
 public class User_Profile extends AppCompatActivity {
@@ -83,7 +83,7 @@ public class User_Profile extends AppCompatActivity {
         name_user.setText(intent.getStringExtra("name"));
         surname_user.setText(intent.getStringExtra("surname"));
 
-        MyAdapter2 adapter = new MyAdapter2(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
+        AdapterForReview adapter = new AdapterForReview(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
         view_review.setAdapter(adapter);
 
 
@@ -114,7 +114,7 @@ public class User_Profile extends AppCompatActivity {
                 line.add(5, counts.get(i).get(5));
                 counts2.add(i-2,line);
             }
-           MyAdapter2 adapter = new MyAdapter2(this, counts2);
+           AdapterForReview adapter = new AdapterForReview(this, counts2);
             view_review.setAdapter(adapter);
             String txt2 = "Рейтинг пользователя: " + counts.get(1).get(0);
             avg_mark.setText(txt2);

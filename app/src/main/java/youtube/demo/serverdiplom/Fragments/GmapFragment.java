@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -43,12 +44,12 @@ import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.Activities.MainActivity.flag;
 
-public class GmapFragment extends Fragment implements OnMapReadyCallback {
+public class GmapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
     public static String myId="";
     GoogleMap mMap;
     public static Integer marker_type[] = {1, 2, 3};
-    FloatingActionButton button;
+    FloatingActionButton setMarkerButton;
     Marker myPosition;
     String args[] = new String[9];
     private LocationManager locationManager;
@@ -78,6 +79,9 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     public static double real_position_y;
     public int counts;
     public static boolean flagForChange = false;
+    private static boolean flagForCamera = false;
+    private static double lastLat = 0;
+    private static double lastLng = 0;
 
     @Nullable
     @Override
@@ -125,10 +129,10 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                         position(new LatLng(myLat, myLng))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 marker.setDraggable(true);
-
+                moveCamera();
                 hideAndShow.setVisibility(View.VISIBLE);
                 confirm.setVisibility(View.VISIBLE);
-                button.setVisibility(View.INVISIBLE);
+                setMarkerButton.setVisibility(View.INVISIBLE);
                 name = data.getStringExtra("name");
                 phone = data.getStringExtra("phone");
                 MyListener myListener = new MyListener(marker, type, name, phone, this, price);
@@ -177,7 +181,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                     dbRead();
                     hideAndShow.setVisibility(View.INVISIBLE);
                     confirm.setVisibility(View.INVISIBLE);
-                    button.setVisibility(View.VISIBLE);
+                    setMarkerButton.setVisibility(View.VISIBLE);
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -227,11 +231,11 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
                 moveCamera();
             }
         });
-        button = (FloatingActionButton) getActivity().findViewById(R.id.button_set_marker);
+        setMarkerButton = (FloatingActionButton) getActivity().findViewById(R.id.button_set_marker);
         search_EditText = (EditText) getActivity().findViewById(R.id.search_EditText);
-        ViewGroup layout = (ViewGroup) button.getParent();
+        ViewGroup layout = (ViewGroup) setMarkerButton.getParent();
         if (!flag) {
-            layout.removeView(button);
+            layout.removeView(setMarkerButton);
 
         } else {
             layout.removeView(searchBtn);
@@ -246,6 +250,8 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     public void add() {
         Intent intent = new Intent(getActivity(), SetMarkerActivity.class);
         startActivityForResult(intent, 1);
+        lastLat = mMap.getCameraPosition().target.latitude;
+        lastLng = mMap.getCameraPosition().target.longitude;
     }
 
 
@@ -257,10 +263,20 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         myLng = location.getLongitude();
         myPosition = mMap.addMarker(new MarkerOptions().position(new LatLng(myLat, myLng))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name)));
+        if (!flagForCamera){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLat, myLng), 13));
+            flagForCamera = true;
+        }
     }
 
     private void moveCamera() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLat, myLng), 13));
+
+    }
+
+    private void moveCamera(double lat, double lng) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 13));
+
     }
 
     private void showMe() {
@@ -274,26 +290,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private android.location.LocationListener locationListener = new android.location.LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            showMe(location);
-        }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
 
     public void openJob() {
         Intent bundle = new Intent(getActivity(), ListOfJobsActivity.class);
@@ -329,7 +326,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             for (int i = 0; i < arrayLists.size(); i++) {
                 counts+=Integer.parseInt(arrayLists.get(i).get(0));
                 if (counts>=10){
-                    button.setVisibility(View.GONE);
+                    setMarkerButton.setVisibility(View.GONE);
                 }
                 Marker marker = mMap.addMarker(new MarkerOptions().
                         position(new LatLng(Double.parseDouble(arrayLists.get(i).get(1)), Double.parseDouble(arrayLists.get(i).get(2))))
@@ -358,7 +355,8 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-        button.setOnClickListener(new View.OnClickListener() {
+
+        setMarkerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 add();
@@ -378,6 +376,9 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             dbRead();
         } else {
             baack.setVisibility(View.VISIBLE);
+            search_EditText.setVisibility(View.GONE);
+            searchBtn.setVisibility(View.GONE);
+            setMarkerButton.setVisibility(View.GONE);
             Marker marker = mMap.addMarker(new MarkerOptions().
                     position(new LatLng(real_position_x, real_position_y))
                     .title("Реальное местоположение")
@@ -394,12 +395,34 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                100, 10, locationListener);
+                100, 10, this);
         locationManager.requestLocationUpdates(
                 LocationManager.NETWORK_PROVIDER, 100, 10,
-                locationListener);
+                this);
         showMe();
+        if (lastLat !=0 & lastLng !=0){
+            moveCamera(lastLat, lastLng);
+        }
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        showMe(location);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }

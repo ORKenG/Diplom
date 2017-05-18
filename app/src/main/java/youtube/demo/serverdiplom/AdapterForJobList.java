@@ -25,12 +25,12 @@ import static youtube.demo.serverdiplom.Fragments.GmapFragment.real_position_y;
  * Created by Cypher on 16.03.2017.
  */
 
-public class MyAdapter4 extends ArrayAdapter<ArrayList<String>> {
+public class AdapterForJobList extends ArrayAdapter<ArrayList<String>> {
     private final Context context;
     private final ArrayList<ArrayList<String>> values;
 
 
-    public MyAdapter4(Context context, ArrayList<ArrayList<String>> objects) {
+    public AdapterForJobList(Context context, ArrayList<ArrayList<String>> objects) {
         super(context, R.layout.adapter, objects);
         this.context = context;
         this.values = objects;

@@ -18,6 +18,7 @@ public class SettingActivity extends AppCompatActivity {
     CheckBox filter3;
     Button accept;
     Button Geo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +47,9 @@ public class SettingActivity extends AppCompatActivity {
         filter1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filter1.isChecked()){
+                if (filter1.isChecked()) {
                     GmapFragment.marker_type[0] = 1;
-                }
-                else {
+                } else {
                     GmapFragment.marker_type[0] = null;
                 }
             }
@@ -57,10 +57,9 @@ public class SettingActivity extends AppCompatActivity {
         filter2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filter2.isChecked()){
+                if (filter2.isChecked()) {
                     GmapFragment.marker_type[1] = 2;
-                }
-                else {
+                } else {
                     GmapFragment.marker_type[1] = null;
                 }
             }
@@ -68,10 +67,9 @@ public class SettingActivity extends AppCompatActivity {
         filter3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filter3.isChecked()){
+                if (filter3.isChecked()) {
                     GmapFragment.marker_type[2] = 3;
-                }
-                else {
+                } else {
                     GmapFragment.marker_type[2] = null;
                 }
             }

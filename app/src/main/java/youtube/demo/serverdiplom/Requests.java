@@ -8,8 +8,10 @@ import com.google.common.base.Joiner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,8 +28,10 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
 
-public class JsonReader {
+
+public class Requests {
 
     private static String readAll(final Reader rd) throws IOException {
         final StringBuilder sb = new StringBuilder();
@@ -37,6 +41,41 @@ public class JsonReader {
         }
         return sb.toString();
     }
+
+    public static void uploadFile(String filename, String path) {
+        HttpURLConnection httpUrlConnection;
+        try {
+
+                httpUrlConnection = (HttpURLConnection) new URL("http://7kmcosmetics.com/upload_file.php?filename=" + filename + "&idu=" + myId).openConnection();
+
+
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setRequestMethod("POST");
+            OutputStream os = httpUrlConnection.getOutputStream();
+            Thread.sleep(1000);
+            BufferedInputStream fis = new BufferedInputStream(new FileInputStream(path));
+            System.out.println(path);
+            System.out.println(httpUrlConnection.getURL().toString());
+
+            while (fis.available()>0){
+                os.write(fis.read());
+            }
+            os.close();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            httpUrlConnection.getInputStream()));
+
+            String s = null;
+            while ((s = in.readLine()) != null) {
+                System.out.println(s);
+            }
+            in.close();
+            fis.close();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;

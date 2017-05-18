@@ -1,25 +1,23 @@
 package youtube.demo.serverdiplom.Activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.apache.http.util.EntityUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import youtube.demo.serverdiplom.AsyncTasks.LoadBlacklist;
-import youtube.demo.serverdiplom.MyAdapter2;
-import youtube.demo.serverdiplom.MyAdapter3;
+import youtube.demo.serverdiplom.AdapterForReview;
+import youtube.demo.serverdiplom.AdapterForBlackList;
 import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMap;
@@ -45,7 +43,6 @@ public class MyUser_Profile extends AppCompatActivity {
         flagForMap = true;
         changeProfile = (Button) findViewById(R.id.change_profile);
         photo = (ImageView) findViewById(R.id.photo);
-
         show_blacklist = (Button) findViewById(R.id.show_blacklist);
         show_review = (Button) findViewById(R.id.show_review);
         show_blacklist.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +66,11 @@ public class MyUser_Profile extends AppCompatActivity {
         final Intent intent = getIntent();
         String txt = "Number of jobs added: " + intent.getStringExtra("count");
         job_count.setText(txt);
-        String forImage = intent.getStringExtra("photo");
+        Picasso.with(this).load("http://7kmcosmetics.com/" + intent.getStringExtra("photo")).into(photo);
+       /* String forImage = intent.getStringExtra("photo");
         byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        photo.setImageBitmap(decodedByte);
+        photo.setImageBitmap(decodedByte);*/
                 name_user.setText(intent.getStringExtra("surname") + " " + intent.getStringExtra("name") + " " + intent.getStringExtra("secondname"));
 
         changeProfile.setOnClickListener(new View.OnClickListener() {
@@ -83,23 +81,34 @@ public class MyUser_Profile extends AppCompatActivity {
                 intent1.putExtra("surname", intent.getStringExtra("surname"));
                 intent1.putExtra("secondname", intent.getStringExtra("secondname"));
                 intent1.putExtra("phone", intent.getStringExtra("phone"));
-                intent1.putExtra("mail", intent.getStringExtra("mail"));
                 intent1.putExtra("photo", intent.getStringExtra("photo"));
                 startActivity(intent1);
             }
         });
-        MyAdapter2 adapter = new MyAdapter2(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
+        AdapterForReview adapter = new AdapterForReview(this, (ArrayList<ArrayList<String>>)intent.getSerializableExtra("review"));
         view_review.setAdapter(adapter);
         blacklist = (ListView) findViewById(R.id.blacklist);
         LoadBlacklist loadBlacklist = new LoadBlacklist();
         loadBlacklist.execute();
         try {
             ArrayList<ArrayList<String>> data = loadBlacklist.get();
-            MyAdapter3 myAdapter3 = new MyAdapter3(this, data);
-            blacklist.setAdapter(myAdapter3);
+            AdapterForBlackList adapterForBlackList = new AdapterForBlackList(this, data);
+            blacklist.setAdapter(adapterForBlackList);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

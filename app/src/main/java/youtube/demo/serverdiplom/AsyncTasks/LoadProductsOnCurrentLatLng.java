@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import youtube.demo.serverdiplom.Activities.MainActivity;
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_Lat;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_Lng;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.stringForSearch;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 public class LoadProductsOnCurrentLatLng extends AsyncTask<Object, Object, ArrayList<ArrayList<String>>> {
     private static final String TAG_PRODUCTS = "marker";
@@ -62,7 +62,7 @@ public class LoadProductsOnCurrentLatLng extends AsyncTask<Object, Object, Array
 
         try {
             System.out.println("Currentlat=" + current_Lat + " currentlng=" + current_Lng + " flag=" + String.valueOf(MainActivity.flag) + " myid=" + myId);
-            json = JsonReader.read(final_URL);
+            json = Requests.read(final_URL);
             System.out.println(final_URL);
             JSONArray markers = json.getJSONArray(TAG_PRODUCTS);
             // looping through All Products

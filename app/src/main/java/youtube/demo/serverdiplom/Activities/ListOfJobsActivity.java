@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import youtube.demo.serverdiplom.AsyncTasks.LoadProductsOnCurrentLatLng;
-import youtube.demo.serverdiplom.MyAdapter4;
+import youtube.demo.serverdiplom.AdapterForJobList;
 import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.Activities.JobActivity.user_id;
@@ -32,7 +32,7 @@ public class ListOfJobsActivity extends AppCompatActivity {
         ArrayList<ArrayList<String>> dataForAdapter;
         try {
             dataForAdapter = thread.get();
-            MyAdapter4 adapter = new MyAdapter4(this, dataForAdapter);
+            AdapterForJobList adapter = new AdapterForJobList(this, dataForAdapter);
             jobview.setAdapter(adapter);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

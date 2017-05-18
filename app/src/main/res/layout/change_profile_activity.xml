@@ -15,7 +15,6 @@
         <EditText
             android:id="@+id/enter_password"
             android:layout_width="match_parent"
-            android:layout_below="@id/enter_Email"
             android:layout_height="48dp"
             android:hint="@string/enter_password"
             android:inputType="textPassword" />

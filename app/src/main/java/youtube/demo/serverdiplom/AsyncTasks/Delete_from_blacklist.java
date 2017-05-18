@@ -9,10 +9,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 /**
  * Created by Cypher on 19.03.2017.
@@ -31,7 +31,7 @@ public class Delete_from_blacklist extends AsyncTask<String, Void, Void> {
         String final_URL = url_delete_product + "?" + encodeParams(params);
         JSONObject json;
         try {
-            json = JsonReader.read(final_URL);
+            json = Requests.read(final_URL);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

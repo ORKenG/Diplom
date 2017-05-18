@@ -6,15 +6,14 @@ import android.support.test.espresso.core.deps.guava.collect.Maps;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.Map;
+import java.util.HashMap;
 
 import youtube.demo.serverdiplom.Fragments.GmapFragment;
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.current_id;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.flagForChange;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 /**
  * Created by Cypher on 08.01.2017.
@@ -39,7 +38,7 @@ public class CreateNewProduct extends AsyncTask<String, String, String> {
         String price = args[8];
 
         // Building Parameters
-        final Map<String, String> params = Maps.newHashMap();
+        final HashMap<String, String> params = Maps.newHashMap();
         params.put("name", name);
         params.put("position_x", position_x);
         params.put("position_y", position_y);
@@ -50,19 +49,22 @@ public class CreateNewProduct extends AsyncTask<String, String, String> {
         params.put("real_position_y", real_posistion_y);
         params.put("address", address);
         params.put("price", price);
-        params.put("id", current_id);
+
         String url_create_product;
         if (!flagForChange) {
+
              url_create_product = "http://7kmcosmetics.com/create_product.php";
         } else {
+            params.put("id", current_id);
             url_create_product = "http://7kmcosmetics.com/update_product.php";
         }
+        System.out.println(params.toString());
         String final_URL = url_create_product + "?" + encodeParams(params);
-        JSONObject json;
         try {
             System.out.println(final_URL);
-            json = JsonReader.read(final_URL);
-        } catch (IOException | JSONException e) {
+            String result  = Requests.sendPostRequest(url_create_product, params);
+            JSONObject jsonObject = new JSONObject(result);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

@@ -12,17 +12,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
  * Created by Cypher on 16.03.2017.
  */
 
-public class MyAdapter2 extends ArrayAdapter<ArrayList<String>> {
+public class AdapterForReview extends ArrayAdapter<ArrayList<String>> {
     private final Context context;
     private final ArrayList<ArrayList<String>> values;
 
-    public MyAdapter2(Context context, ArrayList<ArrayList<String>> objects) {
+    public AdapterForReview(Context context, ArrayList<ArrayList<String>> objects) {
         super(context, R.layout.adapter, objects);
         this.context=context;
         this.values=objects;
@@ -40,10 +42,7 @@ public class MyAdapter2 extends ArrayAdapter<ArrayList<String>> {
         TextView text = (TextView) rowView.findViewById(R.id.adapterText);
         TextView date = (TextView) rowView.findViewById(R.id.adapterDate);
         ImageView photo = (ImageView) rowView.findViewById(R.id.photo);
-        String forImage = values.get(position).get(5);
-        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        photo.setImageBitmap(decodedByte);
+        Picasso.with(getContext()).load("http://7kmcosmetics.com/" + values.get(position).get(5)).into(photo);
         ImageView starOne = (ImageView) rowView.findViewById(R.id.starOne);
         ImageView starTwo = (ImageView) rowView.findViewById(R.id.starTwo);
         ImageView starThree = (ImageView) rowView.findViewById(R.id.starThree);

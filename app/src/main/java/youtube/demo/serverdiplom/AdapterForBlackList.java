@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import youtube.demo.serverdiplom.AsyncTasks.Delete_from_blacklist;
@@ -21,12 +23,12 @@ import youtube.demo.serverdiplom.AsyncTasks.Delete_from_blacklist;
  * Created by Cypher on 16.03.2017.
  */
 
-public class MyAdapter3 extends ArrayAdapter<ArrayList<String>> {
+public class AdapterForBlackList extends ArrayAdapter<ArrayList<String>> {
     private final Context context;
     private final ArrayList<ArrayList<String>> values;
     private String id;
 
-    public MyAdapter3(Context context, ArrayList<ArrayList<String>> objects) {
+    public AdapterForBlackList(Context context, ArrayList<ArrayList<String>> objects) {
         super(context, R.layout.adapter, objects);
         this.context = context;
         this.values = objects;
@@ -41,10 +43,7 @@ public class MyAdapter3 extends ArrayAdapter<ArrayList<String>> {
         final View rowView = inflater.inflate(R.layout.adapter3, parent, false);
         TextView name = (TextView) rowView.findViewById(R.id.adapterName);
         ImageView photo = (ImageView) rowView.findViewById(R.id.photo);
-        String forImage = values.get(position).get(3);
-        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        photo.setImageBitmap(decodedByte);
+        Picasso.with(getContext()).load("http://7kmcosmetics.com/" + values.get(position).get(3)).into(photo);
         final Button delete = (Button) rowView.findViewById(R.id.removeFromBlacklist);
         name.setText(values.get(position).get(0) + " " + values.get(position).get(1));
         id = values.get(position).get(2);

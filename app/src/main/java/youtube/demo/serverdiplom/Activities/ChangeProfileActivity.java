@@ -3,36 +3,34 @@ package youtube.demo.serverdiplom.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.test.espresso.core.deps.guava.collect.Maps;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Map;
 
-import youtube.demo.serverdiplom.JsonReader;
 import youtube.demo.serverdiplom.R;
 
 import static youtube.demo.serverdiplom.Activities.MainActivity.flagForMap;
 import static youtube.demo.serverdiplom.Fragments.GmapFragment.myId;
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
-import static youtube.demo.serverdiplom.JsonReader.sendPostRequest;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
+import static youtube.demo.serverdiplom.Requests.sendPostRequest;
+import static youtube.demo.serverdiplom.Requests.uploadFile;
 
 /**
  * Created by Cypher on 04.04.2017.
@@ -48,27 +46,37 @@ public class ChangeProfileActivity extends AppCompatActivity {
     EditText password2;
     EditText phone;
     String[] args = new String[8];
+    String[] args2 = new String[2];
     ImageView show_photo;
     Bitmap yourSelectedImage;
+    private String selectedPath1;
+    boolean flag = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                //Display an error
-                return;
-            }
-            try {
-                InputStream inputStream = getBaseContext().getContentResolver().openInputStream(data.getData());
-                yourSelectedImage = BitmapFactory.decodeStream(inputStream);
-                show_photo.setImageBitmap(yourSelectedImage);
+            Uri selectedImageUri = data.getData();
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            //Now you can do whatever you want with your inpustream, save it as file, u
+                selectedPath1 = getPath(selectedImageUri);
+                System.out.println("selectedPath1 : " + selectedPath1);
+            show_photo.setImageURI(selectedImageUri);
+            args2[0] = selectedPath1;
+            String filename=selectedPath1.substring(selectedPath1.lastIndexOf("/")+1);
+            args2[1] = filename;
+            System.out.println(selectedPath1 + " filename=" + filename);
+            flag = true;
         }
+    }
+
+    public String getPath(Uri uri) {
+
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
     }
 
     @Override
@@ -96,7 +104,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                 pickIntent.setType("image/*");
 
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
                 startActivityForResult(chooserIntent, 1);
             }
@@ -105,10 +113,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
         surname.setText(intent.getStringExtra("surname"));
         secondname.setText(intent.getStringExtra("secondname"));
         phone.setText(intent.getStringExtra("phone"));
-        String forImage = intent.getStringExtra("photo");
-        byte[] decodedString = Base64.decode(forImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        show_photo.setImageBitmap(decodedByte);
+        Picasso.with(this).load("http://7kmcosmetics.com/" + intent.getStringExtra("photo")).into(show_photo);
         changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,26 +124,35 @@ public class ChangeProfileActivity extends AppCompatActivity {
                 args[4] = password2.getText().toString();
                 args[5] = phone.getText().toString();
                 args[6] = myId;
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-                byte [] byte_arr = stream.toByteArray();
-                String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
-                args[7] = image_str;
+
                 System.out.println("args 3 =" + args[3] + " args 4 =" + args[4]);
-                if (args[3].equals(args[4])){
+                if (args[3].equals(args[4])) {
                     System.out.println(args[3] + " " + args[4]);
                     UpdateUser regTask = new UpdateUser();
                     regTask.execute(args);
-                }
-                else {
+                    if (flag) {
+                        UploadPhoto photoTask = new UploadPhoto();
+                        photoTask.execute(args2);
+                    }
+
+                } else {
                     System.out.println(args[3] + " " + args[4]);
-                    Toast.makeText(getApplicationContext(),"Пароли не совпадают",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
 
 
+    }
+
+    public class UploadPhoto extends AsyncTask<String, Void, Void>{
+        @Override
+        protected Void doInBackground(String... args) {
+            uploadFile(args[1], args[0]);
+
+            return null;
+        }
     }
 
     public class UpdateUser extends AsyncTask<String, Void, Boolean> {
@@ -154,12 +168,10 @@ public class ChangeProfileActivity extends AppCompatActivity {
             params.put("secondname", args[2]);
             params.put("phone", args[5]);
             params.put("id", args[6]);
-            params.put("image", args[7]);
-            System.out.println("ing" + args[7]);
             String url_create_user = "http://7kmcosmetics.com/update_profile.php";
             String final_URL = url_create_user + "?" + encodeParams(params);
             System.out.println(final_URL);
-            String result = sendPostRequest(url_create_user,params);
+            String result = sendPostRequest(url_create_user, params);
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 int success = jsonObject.getInt("success");
@@ -168,7 +180,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                     if (!args[3].equals("")) {
                         SharedPreferences.Editor editor = LoginActivity.sharedPreferences.edit();
 
-                        editor.putString("password",args[3]);
+                        editor.putString("password", args[3]);
                         editor.apply();
                     }
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);

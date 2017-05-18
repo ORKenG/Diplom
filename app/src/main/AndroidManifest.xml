@@ -120,7 +120,8 @@
             android:value="youtube.demo.serverdiplom.Activities.JobActivity" />
         </activity>
         <activity android:name="youtube.demo.serverdiplom.Activities.RegistrationActivity"
-            android:label="Регистрация">
+            android:label="Регистрация"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="youtube.demo.serverdiplom.Activities.LoginActivity" />

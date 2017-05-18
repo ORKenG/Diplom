@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import youtube.demo.serverdiplom.JsonReader;
+import youtube.demo.serverdiplom.Requests;
 
-import static youtube.demo.serverdiplom.JsonReader.encodeParams;
+import static youtube.demo.serverdiplom.Requests.encodeParams;
 
 
 public class AddressToLatLng extends AsyncTask<String, Void, ArrayList<Double>> {
@@ -32,7 +32,7 @@ public class AddressToLatLng extends AsyncTask<String, Void, ArrayList<Double>> 
 
             System.out.println(url);// Путь, что бы можно было посмотреть в браузере ответ службы
             try {
-                response = JsonReader.read(url);
+                response = Requests.read(url);
                 JSONObject location = response.getJSONArray("results").getJSONObject(0);
                 System.out.println("LOCATION1= " + location);
                 location = location.getJSONObject("geometry");
