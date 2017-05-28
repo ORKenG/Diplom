@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (mPhoneView.getText().toString().length() == 10) {
                     ForgotPassword forgotPassword = new ForgotPassword();
                     forgotPassword.execute(mPhoneView.getText().toString());
+                    Toast.makeText(getApplicationContext(), "SMS с новым паролем было отправлено на указанный номер", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Введите свой номер телефона", Toast.LENGTH_LONG).show();
                 }

@@ -29,63 +29,12 @@
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"/>
         </LinearLayout>
-<LinearLayout
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Filter 1"/>
-    <CheckBox
-        android:id="@+id/filter1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:checked="true"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Filter 2"/>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/filter2"
-        android:checked="true"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Filter 3"/>
-    <CheckBox
-        android:id="@+id/filter3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
+<ListView
+    android:id="@+id/filters"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-        />
-
-
-</LinearLayout>
-    <LinearLayout
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/Geo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Настройки геопозиции"/>
-        </LinearLayout>
+</ListView>
     <LinearLayout
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
